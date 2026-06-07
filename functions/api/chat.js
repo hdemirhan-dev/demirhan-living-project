@@ -1,57 +1,75 @@
-import istanbulDatabase from '../../data/istanbul_net.json';
+// Native Einbindung der JSON-Datenbank nach modernem Cloudflare-Standard
+import istanbulDatabase from '../../data/istanbul_net.json' assert { type: 'json' };
 
 export async function onRequestPost(context) {
   try {
-    // 1. Überprüfen, ob das native Cloudflare AI-Binding aktiv ist
+    // Sicherheitsprüfung für das im Dashboard eingerichtete Workers AI Binding
     if (!context.env.AI) {
-      return new Response(
-        JSON.stringify({ error: "Cloudflare Workers AI Binding ist nicht konfiguriert." }), 
-        { status: 500, headers: { "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ 
+        error: "Workers AI Binding wurde im Cloudflare-Dashboard nicht gefunden oder falsch benannt." 
+      }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      });
     }
 
-    // 2. Client-Frage aus dem Request-Body auslesen
+    // 1. Eingehende Anfrage parsen
     const { message } = await context.request.json();
+    
+    if (!message) {
+      return new Response(JSON.stringify({ error: "Keine Nachricht übergeben." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
 
-    // 3. Deine JSON-Wissensbasis (Kanzleien, Ärzte, etc.) für das Modell vorbereiten
-    const stringifiedContext = JSON.stringify(istanbulDatabase);
-
-    // 4. System Prompt mit deinen rechtlichen Rahmenbedingungen und Guardrails definieren
+    // 2. Systemspezifischen Prompt mit den RAG-Daten initialisieren
     const systemPrompt = `
-      Du bist ein hochpräziser KI-Assistent für Steuerrecht und Relocation zwischen Deutschland und der Türkei (Stand Juni 2026).
-      Nutze den folgenden Kontext (Gesetzesänderungen wie Kanun 7582, DBA-Regeln und die Dienstleister-Datenbank in Istanbul), um die Frage des Nutzers präzise zu beantworten.
-      
-      STRIKTE REGELN:
-      1. Wenn im Kontext passende Kanzleien, Ärzte oder Institutionen für das Anliegen des Nutzers existieren, nenne sie am Ende deiner Antwort mit konkreten Kontaktdaten.
-      2. Gib niemals finale steuerliche Berechnungen in Lira ab, da sich Freibeträge inflationsbedingt ändern.
-      3. Weise bei rechtlichen Grauzonen (z.B. Lebensmittelpunkt, Wohnsitzaufgabe) immer darauf hin, dass ein menschlicher Experte konsultiert werden muss.
-      4. Antworte immer auf Deutsch, höflich und professionell im Stil von demirhan.living.
-      
-      KONTEXT-DATENBANK:
-      ${stringifiedContext}
+      Du bist der offizielle, hochspezialisierte AI-Assistent von demirhan.living.
+      Deine Aufgabe ist es, exklusive Erstorientierungen für deutsche Unternehmer und Expats bereitzustellen, die in die Türkei (speziell Istanbul) auswandern möchten.
+
+      Nutze für deine Antworten AUSSCHLIESSLICH das folgende verifizierte Wissen aus unserer RAG-Datenbank. Weiche nicht davon ab und halluziniere keine Gesetze:
+
+      --- RAG COMPLIANCE WISSEN ---
+      ${JSON.stringify(istanbulDatabase.legal_framework_turkey)}
+      ${JSON.stringify(istanbulDatabase.deutsches_aussensteuerrecht_risiken)}
+      ${JSON.stringify(istanbulDatabase.doppelbesteuerungsabkommen_de_tr)}
+
+      --- RAG NETZWERK & INFRASTRUKTUR ---
+      ${JSON.stringify(istanbulDatabase.istanbul_service_directory)}
+      ----------------------------
+
+      WICHTIGE DIKTATE & VERHALTENSREGELN:
+      - Antworte immer auf Deutsch, professionell, elegant und im "Sie"-Stil.
+      - Wenn der Nutzer nach rechtlichen oder steuerlichen Risiken fragt (z.B. Wegzugsteuer § 6 AStG), erkläre die harten Fakten (Drittstaat, Ratenzahlung nur gegen harte Sicherheiten/Bankbürgschaft) und verweise IMMER proaktiv auf unsere gelisteten Kanzleien (insb. Falke law.tax für Steuern oder Dr. Christian Rumpf für Wirtschaftsrecht).
+      - Wenn der Nutzer nach Notaren fragt, kläre auf, dass es staatliche Notariate sind und Ausländer zwingend einen beeidigten Dolmetscher (Yeminli Tercüman) benötigen.
+      - Gib am Ende JEDER komplexen steuerlichen Antwort folgenden Pflicht-Disclaimer aus: "Hinweis: Dies ist eine KI-gestützte Erstorientierung und ersetzt keine individuelle Rechts- oder Steuerberatung."
     `;
 
-    // 5. Native Ausführung von Llama 3 auf der Cloudflare Edge-Infrastruktur
+    // 3. Aufruf von Cloudflare Workers AI mit Llama 3 über das aktivierte Binding
     const aiResponse = await context.env.AI.run('@cf/meta/llama-3-8b-instruct', {
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: message }
-      ],
-      temperature: 0.3 // Niedrige Temperatur für faktengetreue, präzise Antworten
+      ]
     });
 
-    // 6. Antwort an das Frontend von demirhan.living zurückgeben
+    // 4. Antwort an das Frontend ausgeben
     return new Response(JSON.stringify({ reply: aiResponse.response }), {
+      status: 200,
       headers: { 
-        "Content-Type": "application/json; charset=utf-8",
-        "Cache-Control": "no-cache"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
       }
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { 
-      status: 500, 
-      headers: { "Content-Type": "application/json" } 
+    return new Response(JSON.stringify({ 
+      error: "Interner Serverfehler auf der Edge-Runtime.", 
+      details: error.message 
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
     });
   }
 }
