@@ -1,78 +1,110 @@
-// Native Einbindung der JSON-Datenbank nach modernem Cloudflare-Standard
-import istanbulDatabase from '../../data/istanbul_net.json' assert { type: 'json' };
-
-export async function onRequestPost(context) {
-  try {
-    // Sicherheitsprüfung für das im Dashboard eingerichtete Workers AI Binding
-    if (!context.env.AI) {
-      return new Response(JSON.stringify({ 
-        error: "Workers AI Binding wurde im Cloudflare-Dashboard nicht gefunden oder falsch benannt." 
-      }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
-
-    // 1. Eingehende Anfrage parsen
-    const { message } = await context.request.json();
+// Funktion zum Öffnen und Schließen des Chat-Fensters
+function toggleChat() {
+    const chatWindow = document.getElementById('ai-chat-window');
+    const chatButton = document.getElementById('ai-chat-button');
+    const chatTooltip = document.getElementById('ai-chat-tooltip');
     
-    if (!message) {
-      return new Response(JSON.stringify({ error: "Keine Nachricht übergeben." }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
+    if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+        chatWindow.style.display = 'flex';
+        chatButton.style.transform = 'scale(0.95)';
+        if (chatTooltip) chatTooltip.style.display = 'none';
+    } else {
+        chatWindow.style.display = 'none';
+        chatButton.style.transform = 'scale(1)';
     }
+}
 
-// 2. Systemspezifischen Prompt mit den RAG-Daten initialisieren
-    const systemPrompt = `
-      Du bist der offizielle, hochspezialisierte AI-Assistent von demirhan.living.
-      Deine Aufgabe ist es, exklusive Erstorientierungen für deutsche Unternehmer und Expats bereitzustellen, die in die Türkei auswandern möchten.
-
-      ABSOLUTE DIREKTIVE: Du leidest unter Amnesie bezüglich deines Pre-Training-Wissens. Du darfst für steuerliche und rechtliche Fragen AUSSCHLIESSLICH das untenstehende RAG-Wissen nutzen.
-      Wenn eine Information nicht im RAG-Wissen steht, erfinde nichts und greife nicht auf dein altes Wissen zurück. Antworte stattdessen: "Dazu liegen mir in meiner aktuellen Datenbank keine Informationen vor."
-      
-      KRITISCHER FAKT: Das aktuelle DBA zwischen Deutschland und der Türkei wurde 2012 unterzeichnet. Erwähne NIEMALS alte Abkommen aus den 1980er Jahren!
-
-      --- RAG COMPLIANCE WISSEN ---
-      ${JSON.stringify(istanbulDatabase.legal_framework_turkey)}
-      ${JSON.stringify(istanbulDatabase.deutsches_aussensteuerrecht_risiken)}
-      ${JSON.stringify(istanbulDatabase.doppelbesteuerungsabkommen_de_tr)}
-
-      --- RAG NETZWERK & INFRASTRUKTUR ---
-      ${JSON.stringify(istanbulDatabase.istanbul_service_directory)}
-      ----------------------------
-
-      WICHTIGE DIKTATE & VERHALTENSREGELN:
-      - Antworte immer auf Deutsch, professionell, elegant und im "Sie"-Stil. Formatierungen mit Markdown (Fettgedruckt) sind erwünscht.
-      - Wenn der Nutzer nach rechtlichen oder steuerlichen Risiken fragt (z.B. Wegzugsteuer § 6 AStG), erkläre die harten Fakten und verweise IMMER proaktiv auf unsere gelisteten Kanzleien.
-      - Gib am Ende JEDER komplexen steuerlichen Antwort folgenden Pflicht-Disclaimer aus: "Hinweis: Dies ist eine KI-gestützte Erstorientierung und ersetzt keine individuelle Rechts- oder Steuerberatung."
+// Funktion zur Verarbeitung und Übermittlung der Nachrichten
+async function sendMessage(event) {
+    event.preventDefault();
+    
+    const inputField = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    const userMessage = inputField.value.trim();
+    
+    if (!userMessage) return;
+    
+    // 1. Nachricht des Nutzers im UI rendern
+    chatBox.innerHTML += `
+        <div class="chat-msg user-msg">
+            ${userMessage}
+        </div>
     `;
+    inputField.value = '';
+    
+    // 2. Temporären Lade-Indikator rendern
+    const loadingId = 'loading-' + Date.now();
+    chatBox.innerHTML += `
+        <div id="${loadingId}" class="chat-msg system-msg" style="font-style: italic; opacity: 0.7;">
+            Analysiere Datenbank...
+        </div>
+    `;
+    chatBox.scrollTop = chatBox.scrollHeight;
 
-// 3. Aufruf von Cloudflare Workers AI mit Llama 3.1 und strikter Temperatur
-    const aiResponse = await context.env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: message }
-      ],
-      temperature: 0.1
-    });
-
-    // 4. Antwort an das Frontend ausgeben
-    return new Response(JSON.stringify({ reply: aiResponse.response }), {
-      status: 200,
-      headers: { 
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
-      }
-    });
-
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      error: "Interner Serverfehler auf der Edge-Runtime.", 
-      details: error.message 
-    }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
-  }
+    try {
+        // 3. API-Call an die Edge-Route
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMessage })
+        });
+        
+        const data = await response.json();
+        
+        // Lade-Indikator entfernen
+        if (document.getElementById(loadingId)) {
+            document.getElementById(loadingId).remove();
+        }
+        
+        // 4. Fehlerbehandlung
+        if (!response.ok || data.error) {
+            chatBox.innerHTML += `
+                <div class="chat-msg error-msg">
+                    <strong>Edge-Fehler:</strong> ${data.error || 'Unerwartete Serverantwort'} <br>
+                    <small>${data.details || ''}</small>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return;
+        }
+        
+        // 5. Formatierung: Markdown-Sternchen in HTML umwandeln
+        if (data.reply) {
+            let formattedReply = data.reply;
+            
+            // Konvertiert **Text** zu <strong>Text</strong> (Fettgedruckt)
+            formattedReply = formattedReply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Konvertiert *Text* zu <em>Text</em> (Kursiv)
+            formattedReply = formattedReply.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Konvertiert Zeilenumbrüche zu <br>
+            formattedReply = formattedReply.replace(/\n/g, '<br>');
+            
+            chatBox.innerHTML += `
+                <div class="chat-msg reply-msg">
+                    ${formattedReply}
+                </div>
+            `;
+        } else {
+            chatBox.innerHTML += `
+                <div class="chat-msg error-msg">
+                    <strong>Fehler:</strong> Die KI hat keine Textantwort generiert.
+                </div>
+            `;
+        }
+        
+    } catch (error) {
+        if (document.getElementById(loadingId)) {
+            document.getElementById(loadingId).remove();
+        }
+        
+        chatBox.innerHTML += `
+            <div class="chat-msg error-msg">
+                <strong>Verbindungsfehler:</strong> Die Anfrage konnte nicht verarbeitet werden.
+            </div>
+        `;
+    }
+    
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
