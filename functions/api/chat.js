@@ -46,8 +46,8 @@ export async function onRequestPost(context) {
       - Gib am Ende JEDER komplexen steuerlichen Antwort folgenden Pflicht-Disclaimer aus: "Hinweis: Dies ist eine KI-gestützte Erstorientierung und ersetzt keine individuelle Rechts- oder Steuerberatung."
     `;
 
-    // 3. Aufruf von Cloudflare Workers AI mit Llama 3 über das aktivierte Binding
-    const aiResponse = await context.env.AI.run('@cf/meta/llama-3-8b-instruct', {
+// 3. Aufruf von Cloudflare Workers AI mit dem AKTUELLEN Llama-Modell
+    const aiResponse = await context.env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: message }
