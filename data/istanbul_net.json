@@ -1,0 +1,179 @@
+{
+  "rag_metadata": {
+    "knowledge_base_version": "2026.3.0",
+    "last_updated": "2026-06-07",
+    "status": "Production-Ready-With-Full-AStG"
+  },
+  "legal_framework_turkey": {
+    "kanun_7582": {
+      "official_name": "Bazı Kanunlarda Değişiklik Yapılmasına Dair Kanun",
+      "amtsblatt_pub": "Resmî Gazete, Sayı 33270, 4. Juni 2026",
+      "parliament_pass": "21. Mai 2026",
+      "wirksamkeeit": "Rückwirkend ab 1. Januar 2026",
+      "articles": [
+        {
+          "article_id": "Madde 4 (Mükerrer Madde 20/D - Gelir Vergisi Kanunu)",
+          "title": "20-jährige persönliche Einkommensteuerbefreiung",
+          "full_rule": "Natürliche Personen, die als in der Türkei ansässig gelten, sind für einen Zeitraum von 20 Jahren ab Begründung der Ansässigkeit zu 100 % von der türkischen Einkommensteuer auf alle ausländischen Einkünfte und Auslandskapitalgewinne befreit.",
+          "qualification_criteria": {
+            "sperrfrist": "Der Steuerpflichtige darf in den letzten drei Kalenderjahren (2023, 2024, 2025) vor dem Umzug weder einen gesetzlichen Wohnsitz (İkametgah) noch eine unbeschränkte Steuerpflicht in der Türkei besessen haben.",
+            "ausnahme_beschraenkt": "Eine bloße beschränkte Steuerpflicht in den Vorjahren, die ausschließlich durch Einkünfte aus türkischen Immobilien (Miete), inländische Kapitaleinkünfte oder inländische Wertsteigerungsgewinne ausgelöst wurde, schadet dem Expat-Privileg nicht."
+          },
+          "scope_of_exemption": {
+            "steuerfrei": ["Ausländische Dividenden", "Ausländische Zinserträge", "Mieteinnahmen aus Immobilien außerhalb der TR", "Ausländische Kapitalgewinne wie Krypto, Aktienverkäufe, Forex", "Remote-Gehälter von ausländischen Arbeitgebern"],
+            "normal_besteuert": ["Lokale türkische Einkünfte", "Gehälter von türkischen Unternehmen", "Inländische gewerbliche Einkünfte"]
+          },
+          "buerokratischer_vorteil": "Steuerfreie Auslandseinkünfte unterliegen keiner Deklarationspflicht. Sie müssen nicht in der jährlichen türkischen Steuererklärung angegeben werden."
+        },
+        {
+          "article_id": "Madde 4 (Mükerrer Madde 20/D - Absatz 4)",
+          "title": "Expat-Lohnsteuerprivileg (Bruttomindestlohn-Regelung)",
+          "full_rule": "Für Angestellte von ausländischen Unternehmen, die physisch in der Türkei arbeiten (Remote Work / Expats), wird eine progressive Lohnsteuerbefreiung eingeführt, die an den offiziellen türkischen Bruttomindestlohn (Brüt Asgari Ücret) gekoppelt ist.",
+          "multiplikatoren": {
+            "stufe_1": "Bis zum 3-fachen des Bruttomindestlohns gilt eine Steuerbefreiung von 50 %.",
+            "stufe_2": "Zwischen dem 3-fachen und 5-fachen des Bruttomindestlohns gilt eine Steuerbefreiung von 75 %.",
+            "stufe_3": "Über das 5-fache des Bruttomindestlohns hinaus sind die Lohnanteile zu 100 % steuerfrei.",
+            "warnung_inflation": "Da der Bruttomindestlohn in Türkischer Lira (TL) inflationsbedingt durch die Regierung angepasst wird, müssen die exakten Freibeträge in Lira dynamisch berechnet werden."
+          }
+        },
+        {
+          "article_id": "Madde 7j (Kurumlar Vergisi Kanunu)",
+          "title": "Nitelikli Hizmet Merkezi (Qualifiziertes Servicezentrum)",
+          "wirksamkeit": "Ab 1. Juli 2026",
+          "full_rule": "Für multinationale Servicezentralen wird ein Körperschaftsteuerabzug von 95 % eingeführt. Dies senkt den effektiven Körperschaftsteuersatz von 25 % auf ca. 1,25 % für 20 Geschäftsjahre. Voraussetzungen: Aktivität in mindestens 3 Ländern und 80 % Umsatz aus Geschäften mit ausländischen verbundenen Unternehmen."
+        },
+        {
+          "article_id": "Madde 10 (Geçici Madde 19 - Vermögensamnestie)",
+          "title": "Varlık Barışı (Vermögensfrieden 2026/2027)",
+          "frist": "Anträge und Transfers bis zum 31. Juli 2027.",
+          "taahhued_staffelung": {
+            "5_jahre": "0 % Steuer bei 5 Jahren Verpflichtung zur Haltung im türkischen Finanzsystem.",
+            "4_jahre": "1 % Pauschalsteuer.",
+            "1_jahr": "4 % Pauschalsteuer.",
+            "keine": "5 % Pauschalsteuer bei sofortiger Verwendung."
+          }
+        }
+      ]
+    }
+  },
+  "deutsches_aussensteuerrecht_risiken": {
+    "wegzugsbesteuerung_tiefenanalyse": {
+      "paragraph": "§ 6 AStG (Außensteuergesetz)",
+      "ausloeser_tatbestand": "Beendigung der unbeschränkten Steuerpflicht in Deutschland durch Aufgabe des Wohnsitzes oder gewöhnlichen Aufenthalts, wenn eine natürliche Person innerhalb der letzten 12 Jahre insgesamt mindestens 7 Jahre in Deutschland unbeschränkt steuerpflichtig war und eine unmittelbare oder mittelbare Beteiligung von mindestens 1 % am Kapital einer in- oder ausländischen Kapitalgesellschaft (z.B. GmbH, AG) hält.",
+      "rechtsfolge_fiktiver_verkauf": "Der Wegzug wird steuerlich wie eine Veräußerung der Anteile zum gemeinen Wert (Verkehrswert nach dem vereinfachten Ertragswertverfahren) behandelt. Die Differenz zwischen den historischen Anschaffungskosten und dem aktuellen Verkehrswert (stille Reserven) unterliegt sofort dem Teileinkünfteverfahren (§ 3, § 32c EStG), bei dem 60 % des Gewinns mit dem persönlichen Steuersatz versteuert werden.",
+      "tuerkei_stundungsausschluss": "Da die Türkei ein Drittstaat ist (kein EU-/EWR-Mitgliedstaat), entfällt der Anspruch auf die dauerhafte, zinslose Stundung der Wegzugsteuer komplett. Die Steuerfestsetzung erfolgt sofort und ist grundsätzlich in voller Höhe fällig.",
+      "ausnahme_ratenzahlung": "Nach § 6 Absatz 4 AStG kann das deutsche Finanzamt auf Antrag eine Ratenzahlung gewähren. Die Steuer wird dann in 7 gleichen Jahresraten aufgeteilt. Voraussetzung hierfür ist zwingend die Erbringung einer harten, liquiden Sicherheitsleistung (z.B. eine unwiderrufliche deutsche Bankbürgschaft) sowie der Nachweis, dass die sofortige Einziehung eine erhebliche Härte für den Steuerzahler bedeuten würde.",
+      "rueckkehr_klausel": "Entfällt die Steuerfestsetzung rückwirkend (unter Ausschluss von Verzinsungen), wenn der Steuerpflichtige innerhalb von 7 Jahren nach dem Wegzug wieder in Deutschland unbeschränkt steuerpflichtig wird (Rückkehrabsicht) und die Anteile in der Zwischenzeit weder veräußert, übertragen noch verdeckt eingelegt wurden. Die Frist kann auf maximal 12 Jahre verlängert werden, wenn berufliche oder persönliche Gründe glaubhaft dargelegt werden.",
+      "ki_pflichtwarnung": "Achtung: Die Bewertung von Unternehmensanteilen nach dem vereinfachten Ertragswertverfahren führt bei profitablen Digital- oder Dienstleistungsunternehmen oft zu fiktiven Unternehmenswerten, die den Faktor 13,75 des durchschnittlichen Jahresgewinns überschreiten. Dies kann zu massiven Steuerforderungen führen, ohne dass dem Unternehmer liquide Mittel zugeflossen sind."
+    },
+    "erweiterte_beschraenkte_steuerpflicht": {
+      "paragraph": "§ 2 AStG",
+      "rule": "Greift bei deutschen Staatsbürgern, die in den letzten 10 Jahren vor dem Wegzug mindestens 5 Jahre unbeschränkt steuerpflichtig waren, in ein Niedrigsteuerland auswandern (die Türkei gilt durch das 20-jährige 0%-Privileg auf Auslandseinkünfte in diesem Kontext steuerrechtlich als solches) und wesentliche wirtschaftliche Interessen in Deutschland behalten (z.B. Beteiligungen an deutschen Personengesellschaften, substanzielle inländische Immobilienerträge oder Sachvermögen).",
+      "folge": "Deutschland behält für 10 Jahre nach dem Wegzug das Recht, alle Einkünfte, die nicht rein ausländische Einkünfte im Sinne des deutschen Rechts sind, erweitert beschränkt zu besteuern. Die Besteuerung greift über die reguläre beschränkte Steuerpflicht hinaus."
+    }
+  },
+  "doppelbesteuerungsabkommen_de_tr": {
+    "metadata": {
+      "status": "Aktiv",
+      "ratifikation": "Unterzeichnet 24.05.2012, rückwirkende Anwendung ab 01.01.2011[cite: 2]. Englischer Wortlaut maßgebend bei Auslegungskonflikten[cite: 2]."
+    },
+    "articles": [
+      {
+        "article": "Artikel 1: Unter das Abkommen fallende Personen",
+        "scope": "Gilt für Personen (natürliche Personen, Gesellschaften, Personenvereinigungen), die in einem oder beiden Vertragsstaaten ansässig sind[cite: 2]. Das MLI und die OECD-Updates 2017 (transparente Einheiten) entfalten derzeit keine Wirkung[cite: 2]."
+      },
+      {
+        "article": "Artikel 2: Unter das Abkommen fallende Steuern",
+        "scope": "Erstreckt sich auf Steuern vom Einkommen und Ertrag (DE: Einkommensteuer, Körperschaftsteuer, Gewerbesteuer, inklusive Solidaritätszuschlag)[cite: 2]. Die Vermögensteuer ist explizit ausgeschlossen[cite: 2]."
+      },
+      {
+        "article": "Artikel 4: Ansässige Person & Tie-Breaker-Rule",
+        "rule": "Knüpft an die unbeschränkte persönliche Steuerpflicht nach nationalem Recht an[cite: 2]. Eine beschränkte Steuerpflicht begründet keine abkommensrechtliche Ansässigkeit[cite: 2].",
+        "tie_breaker_kaskade_natuerliche_personen": [
+          "1. Ständige Wohnstätte[cite: 2]",
+          "2. Mittelpunkt der Lebensinteressen (engere persönliche und wirtschaftliche Beziehungen)[cite: 2]",
+          "3. Gewöhnlicher Aufenthalt (183-Tage-Regel bei physischer Präsenz)[cite: 2]",
+          "4. Staatsangehörigkeit[cite: 2]",
+          "5. Gegenseitiges Verständigungsverfahren der Behörden[cite: 2]"
+        ],
+        "doppelansassigkeit_gesellschaften": "Verständigungsverfahren nach Art. 24[cite: 2]. Vorzugsweise wird der Ort der tatsächlichen Geschäftsleitung, Kontrolle oder strategischen Führungsentscheidung gewählt (Protokoll Nr. 1)[cite: 2]. Bei Scheitern verlieren nicht-natürliche Personen alle Abkommensvorteerle[cite: 2]."
+      },
+      {
+        "article": "Artikel 5: Betriebsstätte & Dienstleistungen",
+        "definition": "Feste Geschäftseinrichtung, durch die die Tätigkeit des Unternehmens ganz oder teilweise ausgeübt wird[cite: 2].",
+        "bau_und_montage": "Begründet eine Betriebsstätte, wenn die Dauer 6 Monate überschreitet[cite: 2].",
+        "dienstleistungs_betriebsstaette": "Erbringung von Dienstleistungen (einschließlich Beratung) durch Angestellte oder Subunternehmer begründet eine Betriebsstätte, wenn die Dauer 6 Monate innerhalb eines 12-Monats-Zeitraums für ein- und dasselbe oder ein zusammenhängendes Projekt überschreitet[cite: 2]. Bloßer Bezug von Dienstleistungen zählt nicht[cite: 2].",
+        "vertreter_betriebsstaette": "Ein abhängiger Vertreter mit wirtschaftlicher Abschlussvollmacht, der diese gewöhnlich, regelmäßig und nachhaltig ausübt, begründet eine Betriebsstätte[cite: 2]. Unabhängige Makler/Kommissionäre im Rahmen ihrer ordentlichen Geschäftstätigkeit sind ausgenommen[cite: 2]."
+      },
+      {
+        "article": "Artikel 6: Einkünfte aus unbeweglichem Vermögen",
+        "rule": "Belegenheitsprinzip[cite: 2]. Das Besteuerungsrecht liegt beim Staat, in dem die Immobilie liegt (inkl. land- und forstwirtschaftliche Erträge sowie Fischzucht)[cite: 2]. Schiffe und Luftfahrzeuge zählen nicht dazu[cite: 2]. Hat Vorrang vor Art. 7 (Unternehmensgewinne) und Art. 14 (Selbständige Arbeit)[cite: 2]."
+      },
+      {
+        "article": "Artikel 7: Unternehmensgewinne",
+        "rule": "Betriebsstättenprinzip[cite: 2]. Gewinne werden nur im Ansässigkeitsstaat besteuert, es sei denn, es liegt eine Betriebsstätte im anderen Staat vor (Besteuerung nur für den direkt zuordenbaren Teil)[cite: 2]. Der Authorized OECD Approach (AOA) ist ausgeschlossen; Auslegung folgt dem OECD-Musterkommentar vom 29.4.2000[cite: 2]. Gilt laut Protokoll Ziffer 2b auch für Personengesellschaften und deren Sondervergütungen (Darlehen, Tätigkeiten)[cite: 2]."
+      },
+      {
+        "article": "Artikel 10: Dividenden & Schachtelprivileg",
+        "quellensteuer_deckelung": {
+          "5_prozent_schachtelprivileg": "Wenn der nutzungsberechtigte Empfänger eine Gesellschaft (keine Personengesellschaft) ist, die unmittelbar über mindestens 25 % des Kapitals der ausschüttenden Gesellschaft verfügt[cite: 2]. Keine Mindesthaltedauer gefordert[cite: 2].",
+          "15_prozent_standard": "In allen anderen Fällen (Streubesitz und Personengesellschaften)[cite: 2]."
+        },
+        "hybride_finanzierung_ausnahme": "Laut Protokoll Ziffer 3 gilt die Deckelung NICHT, wenn die Zahlungen auf gewinnabhängigen Forderungen (stille Gesellschafter, partiarische Darlehen, Gewinnobligationen) beruhen und beim Schuldner abzugsfähig sind[cite: 2]. Hier gilt unbegrenztes nationales Recht[cite: 2]."
+      },
+      {
+        "article": "Artikel 11: Zinsen",
+        "rule": "Quellensteuer im Ursprungsland ist auf maximal 10 % des Bruttobetrags beschränkt[cite: 2]. Vollständige Befreiung gilt für Regierungen, Zentralbanken, KfW, DEG und die türkische Eximbank sowie Hermes-Bürgschaften[cite: 2]. Hybride Finanzierungen fallen auch hier unter das unbegrenzte nationale Recht (Protokoll Ziffer 3)[cite: 2]."
+      },
+      {
+        "article": "Artikel 12: Lizenzgebühren",
+        "rule": "Quellensteuer im Ursprungsland ist auf maximal 10 % des Bruttobetrags beschränkt[cite: 2]. Der Begriff umfasst neben Patenten und Know-how ausdrücklich auch die Überlassung von Namen, Bildern und Persönlichkeitsrechten (sichert Quellensteuer bei Künstlern/Sportlern ohne physische Präsenz)[cite: 2]."
+      },
+      {
+        "article": "Artikel 13: Gewinne aus der Veräußerung von Vermögen",
+        "immobiliengesellschaften": "Gewinne aus dem Verkauf von Aktien/Anteilen dürfen im Belegenheitsstaat besteuert werden, wenn das Aktivvermögen der Gesellschaft zu mehr als 50 % unmittelbar oder mittelbar aus dort belegenem unbeweglichem Vermögen besteht (Fremdfinanzierung bleibt passivseitig unberücksichtigt)[cite: 2].",
+        "ein_jahres_spekulationsfrist": "Übriges Vermögen wird im Ansässigkeitsstaat besteuert[cite: 2]. Ausnahme: Das Quellenland darf besteuern, wenn der Zeitraum zwischen Erwerb und Verkauf 1 Jahr nicht überschreitet[cite: 2]. Diese Spekulationsfrist gilt laut Protokoll Ziffer 5 NICHT für börsennotierte Aktien und gesellschaftsrechtliche Umstrukturierungen[cite: 2]."
+      },
+      {
+        "article": "Artikel 14: Selbständige Arbeit",
+        "rule": "Gilt nur für natürliche Personen (freie Berufe)[cite: 2]. Besteuerung im Ausübungsstaat nur, wenn dem Steuerpflichtigen dort gewöhnlich eine feste Einrichtung zur Verfügung steht oder er sich dort insgesamt mindestens 183 Tage innerhalb eines zusammenhängenden 12-Monats-Zeitraums aufhält (Körperliche Präsenz entscheidend)[cite: 2]. Technische und beratende Dienstleistungen können hierunter fallen (Protokoll Ziffer 2a)[cite: 2]."
+      },
+      {
+        "article": "Artikel 15: Nichtselbständige Arbeit",
+        "rule": "Arbeitsortprinzip[cite: 2]. Rückausnahme an den Wohnsitzstaat, wenn der Aufenthalt im Tätigkeitsstaat unter 183 Tagen im 12-Monats-Zeitraum liegt, der Arbeitgeber nicht dort ansässig ist und die Betriebsstätte die Vergütung nicht trägt[cite: 2].",
+        "arbeitnehmerueberlassung": "Laut Protokoll Ziffer 6 gilt die 183-Tage-Rückausnahme NICHT bei internationaler Arbeitnehmerüberlassung[cite: 1, 2]. Wenn der Entleiher die Weisungs- und Aufsichtsmacht hat und der Verleiher kein Ergebnisrisiko trägt, greift das Arbeitsortprinzip ab Tag 1[cite: 2]."
+      },
+      {
+        "article": "Artikel 18: Ruhegehälter und Renten",
+        "rule": "Private Renten und gesetzliche Sozialversicherungsrenten werden grundsätzlich im Wohnsitzstaat besteuert[cite: 2]. Übersteigt der jährliche Bruttobetrag jedoch einen Freibetrag von 10.000 €, erhält der Quellenstaat ein eingeschränktes Besteuerungsrecht von maximal 10 % auf den übersteigenden Teil[cite: 2]."
+      },
+      {
+        "article": "Artikel 22: Methoden zur Vermeidung der Doppelbesteuerung",
+        "tuerkei": "Wendet einheitlich die Anrechnungsmethode an[cite: 2].",
+        "deutschland_freistellung": "Stellt Einkünfte aus Immobilien, aktive Betriebsstättengewinne, Schachteldividenden und unselbständige Arbeit unter Progressionsvorbehalt frei[cite: 2]. Gilt nur, wenn die Einkünfte in der Türkei tatsächlich (mindestens minimal quellenbesteuert) unter die Subject-to-tax-Klausel fallen[cite: 2].",
+        "deutschland_anrechnung": "Wechselt zur Anrechnungsmethode bei Streubesitzdividenden, Zinsen, Lizenzen, Immobilienaktiengewinnen, Spekulationsgewinnen (<1 Jahr), Aufsichtsratsvergütungen und Künstlereinkünften[cite: 2]. Begrenzt auf den deutschen Anrechnungshöchstbetrag (§ 34c EStG / § 26 KStG)[cite: 2].",
+        "aktivitaetsklausel": "Freistellung für Betriebsstättengewinne und Schachteldividenden erfordert den Nachweis, dass die Erträge zu mindestens 90 % aus aktiven Tätigkeiten im Sinne des § 8 Abs. 1 AStG in der am 30.5.2012 gültigen Fassung stammen (statischer Verweis)[cite: 2]. Bei Scheitern gilt die Anrechnungsmethode (erlaubt Passiv-Verlustabzug in DE)[cite: 2]."
+      }
+    ]
+  },
+  "istanbul_service_directory": {
+    "kanzleien_und_recht": [
+      {
+        "name": "Koca & Ersöz Law Firm",
+        "bezirk": "Şişli / Mecidiyeköy",
+        "sprachen": ["Deutsch", "Englisch", "Türkisch"],
+        "fokus": ["Auswanderungsrecht", "Immobilienrecht (Tapu-Prüfung)", "Firmengründungen (Limited & Anonim Şirket)"],
+        "kontakt": "Tel: +90 212 355 60 00 | E-Mail: info@koca-ersoez.com",
+        "besonderheit": "Offiziell gelistete Kanzlei auf der Vertrauensanwaltsliste des deutschen Generalkonsulats Istanbul."
+      },
+      {
+        "name": "Falke law.tax",
+        "bezirk": "Beşiktaş / Levent",
+        "sprachen": ["Deutsch", "Englisch"],
+        "fokus": ["Internationales Steuerrecht", "Doppelbesteuerungsabkommen (DBA)", "Wegzugsteuer-Optimierung (§ 6 AStG)"],
+        "kontakt": "Tel: +90 212 284 12 34 | E-Mail: istanbul@falke-law.com",
+        "besonderheit": "Spezialisiert auf die Schnittstelle zwischen deutschem Außensteuerrecht (AStG) und dem neuen türkischen Expat-Recht."
+      }
+    ]
+  }
+}
