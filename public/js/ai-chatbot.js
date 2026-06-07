@@ -1,3 +1,20 @@
+// Funktion zum Öffnen und Schließen des Chat-Fensters
+function toggleChat() {
+    const chatWindow = document.getElementById('ai-chat-window');
+    const chatButton = document.getElementById('ai-chat-button');
+    const chatTooltip = document.getElementById('ai-chat-tooltip');
+    
+    if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+        chatWindow.style.display = 'flex';
+        chatButton.style.transform = 'scale(0.95)';
+        if (chatTooltip) chatTooltip.style.display = 'none'; // Hinweis-Tooltip permanent ausblenden
+    } else {
+        chatWindow.style.display = 'none';
+        chatButton.style.transform = 'scale(1)';
+    }
+}
+
+// Funktion zur Verarbeitung und Übermittlung der Nachrichten
 async function sendMessage(event) {
     event.preventDefault();
     
