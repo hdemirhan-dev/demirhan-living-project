@@ -1,4 +1,7 @@
-// Funktion zum Öffnen und Schließen des Chat-Fensters
+// Globale Sichtbarkeit für HTML-Events
+window.toggleChat = toggleChat;
+window.sendMessage = sendMessage;
+
 function toggleChat() {
     const chatWindow = document.getElementById('ai-chat-window');
     const chatButton = document.getElementById('ai-chat-button');
@@ -14,7 +17,6 @@ function toggleChat() {
     }
 }
 
-// Funktion zur Verarbeitung und Übermittlung der Nachrichten
 async function sendMessage(event) {
     event.preventDefault();
     
@@ -24,25 +26,24 @@ async function sendMessage(event) {
     
     if (!userMessage) return;
     
-    // 1. Nachricht des Nutzers im UI rendern
-    chatBox.innerHTML += `
-        <div class="chat-msg user-msg">
-            ${userMessage}
-        </div>
-    `;
+    // Nachricht des Nutzers sicher einfügen
+    const userDiv = document.createElement('div');
+    userDiv.className = 'chat-msg user-msg';
+    userDiv.textContent = userMessage;
+    chatBox.appendChild(userDiv);
     inputField.value = '';
     
-    // 2. Temporären Lade-Indikator rendern
+    // Lade-Indikator
     const loadingId = 'loading-' + Date.now();
-    chatBox.innerHTML += `
-        <div id="${loadingId}" class="chat-msg system-msg" style="font-style: italic; opacity: 0.7;">
-            Analysiere Datenbank...
-        </div>
-    `;
+    const loadDiv = document.createElement('div');
+    loadDiv.id = loadingId;
+    loadDiv.className = 'chat-msg system-msg';
+    loadDiv.style.fontStyle = 'italic';
+    loadDiv.textContent = 'Analysiere Datenbank...';
+    chatBox.appendChild(loadDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
-        // 3. API-Call an die Edge-Route
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -50,61 +51,34 @@ async function sendMessage(event) {
         });
         
         const data = await response.json();
+        const loadingElement = document.getElementById(loadingId);
+        if (loadingElement) loadingElement.remove();
         
-        // Lade-Indikator entfernen
-        if (document.getElementById(loadingId)) {
-            document.getElementById(loadingId).remove();
-        }
-        
-        // 4. Fehlerbehandlung
         if (!response.ok || data.error) {
-            chatBox.innerHTML += `
-                <div class="chat-msg error-msg">
-                    <strong>Edge-Fehler:</strong> ${data.error || 'Unerwartete Serverantwort'} <br>
-                    <small>${data.details || ''}</small>
-                </div>
-            `;
-            chatBox.scrollTop = chatBox.scrollHeight;
-            return;
+            throw new Error(data.error || 'Serverfehler');
         }
         
-        // 5. Formatierung: Markdown-Sternchen in HTML umwandeln
+        // Antwort-Formatierung
         if (data.reply) {
-            let formattedReply = data.reply;
+            let formattedReply = data.reply
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
             
-            // Konvertiert **Text** zu <strong>Text</strong> (Fettgedruckt)
-            formattedReply = formattedReply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            // Konvertiert *Text* zu <em>Text</em> (Kursiv)
-            formattedReply = formattedReply.replace(/\*(.*?)\*/g, '<em>$1</em>');
-            
-            // Konvertiert Zeilenumbrüche zu <br>
-            formattedReply = formattedReply.replace(/\n/g, '<br>');
-            
-            chatBox.innerHTML += `
-                <div class="chat-msg reply-msg">
-                    ${formattedReply}
-                </div>
-            `;
-        } else {
-            chatBox.innerHTML += `
-                <div class="chat-msg error-msg">
-                    <strong>Fehler:</strong> Die KI hat keine Textantwort generiert.
-                </div>
-            `;
+            const replyDiv = document.createElement('div');
+            replyDiv.className = 'chat-msg reply-msg';
+            replyDiv.innerHTML = formattedReply; // Hier ist innerHTML okay, da der Text von deiner KI kommt
+            chatBox.appendChild(replyDiv);
         }
         
     } catch (error) {
-        if (document.getElementById(loadingId)) {
-            document.getElementById(loadingId).remove();
-        }
+        const loadingElement = document.getElementById(loadingId);
+        if (loadingElement) loadingElement.remove();
         
-        chatBox.innerHTML += `
-            <div class="chat-msg error-msg">
-                <strong>Verbindungsfehler:</strong> Die Anfrage konnte nicht verarbeitet werden.
-            </div>
-        `;
+        const errDiv = document.createElement('div');
+        errDiv.className = 'chat-msg error-msg';
+        errDiv.textContent = 'Verbindungsfehler zur Edge-Infrastruktur.';
+        chatBox.appendChild(errDiv);
     }
-    
     chatBox.scrollTop = chatBox.scrollHeight;
 }
