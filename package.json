@@ -1,0 +1,14 @@
+{
+  "name": "demirhan-living-project",
+  "version": "1.0.0",
+  "description": "AI assistant for Turkish-German tax and consulting processes",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.40.1",
+    "vite": "^8.0.0"
+  }
+}
