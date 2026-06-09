@@ -1,13 +1,9 @@
 import { defineConfig } from 'vite';
-import { cloudflare } from '@cloudflare/vite-plugin'; // <-- Hier ist die Änderung: { cloudflare }
 
 export default defineConfig({
-  plugins: [
-    cloudflare() 
-  ],
-  root: 'src', 
+  // Das sorgt dafür, dass alle Pfade (CSS/JS) absolut zum Root gesetzt werden
+  base: './', 
   build: {
-    outDir: '../dist', 
-    emptyOutDir: true,
-  }
+    outDir: 'dist',
+  },
 });
