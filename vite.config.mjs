@@ -1,9 +1,14 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
-  // Das sorgt dafür, dass alle Pfade (CSS/JS) absolut zum Root gesetzt werden
-  base: './', 
+  base: './',
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'src/index.html'),
+      },
+    },
   },
 });
