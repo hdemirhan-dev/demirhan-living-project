@@ -12,7 +12,7 @@ export async function onRequestPost(context) {
     let contextText = "Keine zusätzlichen Datenbank-Infos verfügbar.";
     try {
       const origin = new URL(context.request.url).origin;
-      const dbResponse = await fetch(`${origin}/data/istanbul_database.json`);
+      const dbResponse = await fetch(`${origin}/istanbul_database.json`);
       
       if (dbResponse.ok) {
         const database = await dbResponse.json();
