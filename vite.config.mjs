@@ -1,14 +1,11 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
 
 export default defineConfig({
-  base: './',
+  // Definiert 'src' als die Wurzel deines Frontend-Projekts
+  root: 'src',
+  // Bestimmt, wo die fertigen Produktionsdateien landen sollen
   build: {
-    outDir: 'dist',
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'src/index.html'),
-      },
-    },
-  },
+    outDir: '../dist', // Geht eine Ebene höher, um 'dist' im Hauptverzeichnis zu erstellen
+    emptyOutDir: true,
+  }
 });
