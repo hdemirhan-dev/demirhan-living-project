@@ -1,10 +1,12 @@
 export async function onRequestPost(context) {
   // Zentrale Header-Konfiguration
-  const headers = { 
-    'Content-Type': 'application/json',
+// ...
+const headers = { 
+    'Content-Type': 'application/json; charset=utf-8', // WICHTIG: UTF-8 explizit setzen
     'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY'
-  };
+    'Cache-Control': 'no-store' // Fix für den "Cache-Control"-Fehler aus image_27b74a.png
+};
+// ...
 
   try {
     const body = await context.request.json();
