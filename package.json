@@ -10,5 +10,8 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.40.1",
     "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
   }
 }

@@ -1,3 +1,6 @@
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+
 export async function onRequestPost(context) {
   try {
     const { message } = await context.request.json();
@@ -8,38 +11,69 @@ export async function onRequestPost(context) {
       });
     }
 
-    // 1. Lokale Istanbul-Datenbank laden
-    let contextText = "Keine zusätzlichen Datenbank-Infos verfügbar.";
+    // ==========================================================
+    // NEW: Verbindung zum demirhan-mevzuat-mcp Server aufbauen
+    // ==========================================================
+    let mevzuatContext = "Keine zusätzlichen Mevzuat-Daten verfügbar.";
+    
     try {
-      const origin = new URL(context.request.url).origin;
-      const dbResponse = await fetch(`${origin}/istanbul_database.json`);
-      if (dbResponse.ok) {
-        const database = await dbResponse.json();
-        contextText = JSON.stringify(database);
+      const mcpClient = new Client({
+        name: "demirhan-living-backend",
+        version: "1.0.0"
+      });
+
+      // Nutze den verifizierten Endpoint deines Live-Workers
+      const transport = new SSEClientTransport(
+        new URL("https://demirhan-mevzuat-mcp.hdpasso29.workers.dev/mcp")
+      );
+
+      await mcpClient.connect(transport);
+
+      // Hier wird dein spezifisches Tool aufgerufen (passe den Namen ggf. an)
+      const toolResponse = await mcpClient.callTool({
+        name: "get_legislation_markdown", 
+        arguments: { query: message }
+      });
+
+      if (toolResponse && toolResponse.content && toolResponse.content[0]) {
+        mevzuatContext = toolResponse.content[0].text;
       }
-    } catch (dbError) {
-      // Ignorieren wir, damit die KI trotzdem antworten kann
+
+    } catch (mcpError) {
+      console.error("Fehler beim Abrufen der MCP-Daten:", mcpError);
+      // Fallback: Wenn MCP down ist, versuchen wir die lokale JSON zu laden
+      try {
+        const origin = new URL(context.request.url).origin;
+        const dbResponse = await fetch(`${origin}/istanbul_database.json`);
+        if (dbResponse.ok) {
+          const database = await dbResponse.json();
+          mevzuatContext = JSON.stringify(database);
+        }
+      } catch (dbError) {
+        // Ignorieren, damit die KI trotzdem antworten kann
+      }
     }
 
-    // 2. Cloudflare Workers AI aufrufen
+    // Cloudflare Workers AI initialisieren
     const ai = context.env.AI;
     if (!ai) {
-      return new Response(JSON.stringify({ error: "AI Binding (Umgebungsvariable) fehlt im Cloudflare Dashboard." }), { 
+      return new Response(JSON.stringify({ error: "AI Binding fehlt im Cloudflare Dashboard." }), { 
         status: 500, 
         headers: { 'Content-Type': 'application/json' } 
       });
     }
     
-const systemPrompt = `
+    // System-Prompt mit den dynamischen MCP-Echtzeitdaten füttern
+    const systemPrompt = `
       Du bist der offizielle, hochspezialisierte KI-Assistent von "Demirhan Living".
       Deine AUFGABE ist es, Fragen basierend auf der bereitgestellten Datenbank absolut präzise, professionell und auf Deutsch zu beantworten.
       
       FOKUS-THEMA:
       Du antwortest AUSSCHLIESSLICH auf Fragen, die mit dem internationalen Steuerrecht, der deutschen Wegzugsbesteuerung (z. B. § 6 AStG) und dem Doppelbesteuerungsabkommen (DBA) zwischen Deutschland und der Türkei im Kontext von Auswanderern und Investoren zu tun haben.
       
-      Hier ist das exklusive Wissen aus unserer internen Datenbank:
+      Hier ist das exklusive Wissen aus unserem Live-Mevzuat-MCP-Server:
       ---
-      ${contextText}
+      ${mevzuatContext}
       ---
       
       STRIKTE REGELN FÜR THEMENEINSCHRÄNKUNG:
@@ -56,7 +90,7 @@ const systemPrompt = `
          *Rechtlicher Hinweis: Die von dieser KI bereitgestellten Informationen dienen ausschließlich der allgemeinen Orientierung und stellen keine Rechts- oder Steuerberatung dar. Jegliche Haftung für die Richtigkeit, Vollständigkeit oder Aktualität der Inhalte ist ausgeschlossen.*
     `;
 
-    // Wechsel auf das logisch stärkere Gemma 4 Modell mit 256k Kontextfenster
+    // Ausführung des Gemma-Modells
     const aiResponse = await ai.run('@cf/google/gemma-4-26b-a4b-it', {
       messages: [
         { role: 'system', content: systemPrompt },
@@ -64,8 +98,6 @@ const systemPrompt = `
       ]
     });
 
-    // WICHTIG: Gemma liefert die Antwort im standardisierten OpenAI-Format (response.choices[0].message.content)
-    // Wir fangen zur Sicherheit beide Formate ab (.response und .choices)
     const replyText = aiResponse.choices?.[0]?.message?.content || aiResponse.response || "Keine Antwort generiert.";
 
     return new Response(JSON.stringify({ reply: replyText }), {
