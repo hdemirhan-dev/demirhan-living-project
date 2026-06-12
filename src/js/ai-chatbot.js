@@ -25,41 +25,38 @@ initMcpConnection();
 // 1. CHATBOT WIDGET LOGIK
 // ==========================================
 
-// Funktionen an das globale 'window'-Objekt binden (Wichtig für Vite/ESM Kompatibilität)
 window.toggleChat = function() {
     const chatWindow = document.getElementById('ai-chat-window');
     const tooltip = document.getElementById('ai-chat-tooltip');
     
     if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
         chatWindow.style.display = 'flex';
-        tooltip.style.display = 'none'; // Tooltip ausblenden, wenn Chat öffnet
+        tooltip.style.display = 'none';
     } else {
         chatWindow.style.display = 'none';
     }
 };
 
 window.sendMessage = async function(event) {
-    event.preventDefault(); // Verhindert das Neuladen der Seite
+    event.preventDefault();
     
     const inputField = document.getElementById('user-input');
     const userText = inputField.value.trim();
     
     if (!userText) return;
 
-    // Nachricht des Nutzers anzeigen
     appendMessage('user', userText);
     inputField.value = '';
 
-    // Lade-Animation anzeigen
-    const loadingId = appendMessage('system', 'Analysiere Mevzuat & Datenbank...'); 
+    const loadingId = appendMessage('system', 'Durchsuche Gesetze, Verordnungen und Rundschreiben...'); 
 
-    // --- NEU: MCP Tool-Abfrage im Browser ---
+    // --- NEU: Das mächtige Bedesten-Tool (search_mevzuat) aufrufen ---
     let liveMevzuatContext = "";
     if (mcpClient) {
         try {
             const toolResponse = await mcpClient.callTool({
-                name: "get_legislation_markdown", // Achte darauf, dass das Tool im Worker exakt so heißt!
-                arguments: { query: userText }
+                name: "search_mevzuat", // Aktiviert die Suche über alle 12 Rechtsformen
+                arguments: { query: userText } // HINWEIS: Falls der Worker hier einen Fehler wirft, ändere "query" zu "keyword"
             });
             
             if (toolResponse && toolResponse.content && toolResponse.content[0]) {
@@ -71,13 +68,11 @@ window.sendMessage = async function(event) {
     }
 
     try {
-        // Sichere Anfrage an dein Cloudflare Backend (/api/chat)
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            // Wir senden jetzt die Nachricht UND den Kontext an die Edge
             body: JSON.stringify({ 
                 message: userText,
                 mcpContext: liveMevzuatContext 
@@ -88,7 +83,6 @@ window.sendMessage = async function(event) {
 
         const data = await response.json();
 
-        // Lade-Text entfernen und KI-Antwort einfügen
         removeMessage(loadingId);
         appendMessage('system', data.reply);
 
@@ -110,11 +104,10 @@ function appendMessage(sender, text) {
     msgDiv.classList.add('chat-msg');
     msgDiv.classList.add(sender === 'user' ? 'user-msg' : 'system-msg');
     
-    // Formatierung für fette Schrift und Zeilenumbrüche (optional, macht die KI-Antworten lesbarer)
     msgDiv.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
     
     chatBox.appendChild(msgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight; // Automatisch nach unten scrollen
+    chatBox.scrollTop = chatBox.scrollHeight;
     
     return msgId;
 }
@@ -124,28 +117,20 @@ function removeMessage(msgId) {
     if (msgDiv) msgDiv.remove();
 }
 
-
 // ==========================================
 // 2. SCROLL REVEAL ANIMATION (FX)
 // ==========================================
 
-// Startet den Observer sofort beim Laden der Datei (perfekt für Vite HMR)
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            // Blendet das Element ein
             entry.target.classList.add('visible');
-            
-            // Optional: Wenn du möchtest, dass Elemente beim Hochscrollen
-            // wieder unsichtbar werden, lasse die nächste Zeile auskommentiert.
-            // observer.unobserve(entry.target);
         }
     });
 }, {
-    threshold: 0.1 // Löst aus, wenn 10% des Elements auf dem Bildschirm sichtbar sind
+    threshold: 0.1
 });
 
-// Sucht alle unsichtbaren Elemente und übergibt sie dem Observer
 const hiddenElements = document.querySelectorAll('.reveal');
 if (hiddenElements.length > 0) {
     hiddenElements.forEach((el) => observer.observe(el));
