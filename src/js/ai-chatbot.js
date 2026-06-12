@@ -74,10 +74,12 @@ window.sendMessage = async function(event) {
             removeMessage(loadingId);
             appendMessage('system', decision.reply);
         }
-    } catch (error) {
-        removeMessage(loadingId);
-        appendMessage('system', 'Fehler in der autonomen Recherchekette.');
-    }
+} catch (error) {
+    console.error('Detaillierter Fehler:', error); // Zeigt den echten Fehler in der F12-Konsole!
+    removeMessage(loadingId);
+    // Ändere die Anzeige zu:
+    appendMessage('system', 'Fehler: ' + error.message); 
+}
 };
 
 function appendMessage(s, t) { /* ... wie bisher ... */ }
