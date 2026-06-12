@@ -98,6 +98,15 @@ export async function onRequestPost(context) {
       mevzuatContext = `SYSTEM-DEBUG: Code-Exception aufgetreten: ${mcpError.message}`;
     }
 
+    // Wenn ein Fehler auftrat, überspringen wir die KI komplett und werfen den Log direkt ins Chat-UI
+    if (mevzuatContext.includes("SYSTEM-DEBUG")) {
+      return new Response(JSON.stringify({ 
+        reply: `**[⚠️ SYSTEM-DEBUG AUSGELÖST]**\nDie KI wurde pausiert, um diesen rohen Server-Log auszugeben:\n\n${mevzuatContext}` 
+      }), { 
+        status: 200, 
+        headers: { 'Content-Type': 'application/json; charset=utf-8' } 
+      });
+    }
     // ==========================================================
     // CLOUDFLARE WORKERS AI INTEGRATION
     // ==========================================================
