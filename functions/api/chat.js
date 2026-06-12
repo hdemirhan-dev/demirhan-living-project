@@ -1,8 +1,6 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
-
 export async function onRequestPost(context) {
   try {
+    // Nachricht des Nutzers aus dem Request extrahieren
     const { message } = await context.request.json();
     if (!message) {
       return new Response(JSON.stringify({ error: "Keine Nachricht empfangen" }), { 
@@ -11,37 +9,66 @@ export async function onRequestPost(context) {
       });
     }
 
-    // ==========================================================
-    // NEW: Verbindung zum demirhan-mevzuat-mcp Server aufbauen
-    // ==========================================================
+    // Standard-Fallback Kontext festlegen
     let mevzuatContext = "Keine zusätzlichen Mevzuat-Daten verfügbar.";
     
+    // ==========================================================
+    // NATIVER SSE-HANDSHAKE FÜR CLOUDFLARE RUNTIMES (EDGE-COMPATIBLE)
+    // ==========================================================
     try {
-      const mcpClient = new Client({
-        name: "demirhan-living-backend",
-        version: "1.0.0"
+      const mcpBaseUrl = "https://demirhan-mevzuat-mcp.hdpasso29.workers.dev/mcp";
+
+      // 1. Initialer GET-Request mit Event-Stream Header absetzen, um die Session-ID zu generieren
+      const sseResponse = await fetch(mcpBaseUrl, {
+        headers: { "Accept": "text/event-stream" }
       });
 
-      // Nutze den verifizierten Endpoint deines Live-Workers
-      const transport = new SSEClientTransport(
-        new URL("https://demirhan-mevzuat-mcp.hdpasso29.workers.dev/mcp")
-      );
+      if (sseResponse.ok && sseResponse.body) {
+        // Den ersten Stream-Chunk auslesen, um die zugewiesene Session abzufangen
+        const reader = sseResponse.body.getReader();
+        const { value } = await reader.read();
+        const chunkText = new TextDecoder().decode(value);
+        reader.releaseLock(); // Verbindung zur Ressource sofort wieder sauber freigeben
 
-      await mcpClient.connect(transport);
+        // Extrahiere den Message-Endpoint samt Session-ID aus dem SSE-Event-Text
+        const match = chunkText.match(/data:\s*([^\s]+)/) || chunkText.match(/endpoint:\s*([^\s]+)/);
+        
+        if (match && match[1]) {
+          const messageEndpoint = match[1];
+          
+          // Absolute URL für den darauffolgenden POST-Befehl zusammenbauen
+          const postUrl = messageEndpoint.startsWith("http") 
+            ? messageEndpoint 
+            : `https://demirhan-mevzuat-mcp.hdpasso29.workers.dev${messageEndpoint}`;
 
-      // Hier wird dein spezifisches Tool aufgerufen (passe den Namen ggf. an)
-      const toolResponse = await mcpClient.callTool({
-        name: "get_legislation_markdown", 
-        arguments: { query: message }
-      });
+          // 2. Direktes Senden des JSON-RPC Tool-Aufrufs via HTTP POST
+          const toolResponse = await fetch(postUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              jsonrpc: "2.0",
+              method: "tools/call",
+              params: {
+                name: "get_legislation_markdown", // Name deines registrierten MCP-Tools
+                arguments: { query: message }
+              },
+              id: 1
+            })
+          });
 
-      if (toolResponse && toolResponse.content && toolResponse.content[0]) {
-        mevzuatContext = toolResponse.content[0].text;
+          if (toolResponse.ok) {
+            const mcpResult = await toolResponse.json();
+            // JSON-RPC Antwortstruktur auswerten und Text extrahieren
+            if (mcpResult.result && mcpResult.result.content && mcpResult.result.content[0]) {
+              mevzuatContext = mcpResult.result.content[0].text;
+            }
+          }
+        }
       }
-
     } catch (mcpError) {
-      console.error("Fehler beim Abrufen der MCP-Daten:", mcpError);
-      // Fallback: Wenn MCP down ist, versuchen wir die lokale JSON zu laden
+      console.error("Native Edge-MCP Abfrage fehlgeschlagen:", mcpError);
+      
+      // FALLBACK: Wenn der MCP-Server blockiert, laden wir die lokale JSON-Datenbank
       try {
         const origin = new URL(context.request.url).origin;
         const dbResponse = await fetch(`${origin}/istanbul_database.json`);
@@ -50,20 +77,21 @@ export async function onRequestPost(context) {
           mevzuatContext = JSON.stringify(database);
         }
       } catch (dbError) {
-        // Ignorieren, damit die KI trotzdem antworten kann
+        // Ignorieren, damit die KI im Notfall mit ihrem eigenen Wissen antwortet
       }
     }
 
-    // Cloudflare Workers AI initialisieren
+    // ==========================================================
+    // CLOUDFLARE WORKERS AI INTEGRATION
+    // ==========================================================
     const ai = context.env.AI;
     if (!ai) {
-      return new Response(JSON.stringify({ error: "AI Binding fehlt im Cloudflare Dashboard." }), { 
+      return new Response(JSON.stringify({ error: "AI Binding (Umgebungsvariable) fehlt im Cloudflare Dashboard." }), { 
         status: 500, 
         headers: { 'Content-Type': 'application/json' } 
       });
     }
     
-    // System-Prompt mit den dynamischen MCP-Echtzeitdaten füttern
     const systemPrompt = `
       Du bist der offizielle, hochspezialisierte KI-Assistent von "Demirhan Living".
       Deine AUFGABE ist es, Fragen basierend auf der bereitgestellten Datenbank absolut präzise, professionell und auf Deutsch zu beantworten.
@@ -90,7 +118,7 @@ export async function onRequestPost(context) {
          *Rechtlicher Hinweis: Die von dieser KI bereitgestellten Informationen dienen ausschließlich der allgemeinen Orientierung und stellen keine Rechts- oder Steuerberatung dar. Jegliche Haftung für die Richtigkeit, Vollständigkeit oder Aktualität der Inhalte ist ausgeschlossen.*
     `;
 
-    // Ausführung des Gemma-Modells
+    // Aufruf des logisch starken Gemma 4 Modells auf der Edge
     const aiResponse = await ai.run('@cf/google/gemma-4-26b-a4b-it', {
       messages: [
         { role: 'system', content: systemPrompt },
@@ -98,6 +126,7 @@ export async function onRequestPost(context) {
       ]
     });
 
+    // OpenAI- und Cloudflare-Standardformate gleichermaßen abfangen
     const replyText = aiResponse.choices?.[0]?.message?.content || aiResponse.response || "Keine Antwort generiert.";
 
     return new Response(JSON.stringify({ reply: replyText }), {
@@ -107,7 +136,7 @@ export async function onRequestPost(context) {
 
   } catch (err) {
     return new Response(JSON.stringify({ 
-      error: "Interner Serverfehler in der KI-Schnittstelle", 
+      error: "Interner Serverfehler in der KI-Schnittstelle",
       details: err.message 
     }), { 
       status: 500, 
