@@ -13,29 +13,44 @@ export async function onRequestPost(context) {
     let mevzuatContext = "Keine zusätzlichen Mevzuat-Daten verfügbar.";
     
     // ==========================================================
-    // NATIVER SSE-HANDSHAKE FÜR CLOUDFLARE RUNTIMES (EDGE-COMPATIBLE)
+    // NATIVER SSE-HANDSHAKE (ROBUSTE VERSION MIT DEBUG-INJECTION)
     // ==========================================================
     try {
       const mcpBaseUrl = "https://demirhan-mevzuat-mcp.hdpasso29.workers.dev/mcp";
 
-      // 1. Initialer GET-Request mit Event-Stream Header absetzen, um die Session-ID zu generieren
+      // 1. Initialer GET-Request mit Event-Stream Header absetzen
       const sseResponse = await fetch(mcpBaseUrl, {
         headers: { "Accept": "text/event-stream" }
       });
 
       if (sseResponse.ok && sseResponse.body) {
-        // Den ersten Stream-Chunk auslesen, um die zugewiesene Session abzufangen
         const reader = sseResponse.body.getReader();
-        const { value } = await reader.read();
-        const chunkText = new TextDecoder().decode(value);
-        reader.releaseLock(); // Verbindung zur Ressource sofort wieder sauber freigeben
+        let messageEndpoint = null;
+        let accumulatedText = "";
 
-        // Extrahiere den Message-Endpoint samt Session-ID aus dem SSE-Event-Text
-        const match = chunkText.match(/data:\s*([^\s]+)/) || chunkText.match(/endpoint:\s*([^\s]+)/);
-        
-        if (match && match[1]) {
-          const messageEndpoint = match[1];
+        // ROBUST: Wir lesen den Stream so lange in einer Schleife, 
+        // bis der Chunk mit der Session-ID auch wirklich ankommt!
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
           
+          accumulatedText += new TextDecoder().decode(value, { stream: true });
+          
+          // Suchen nach "endpoint: /mcp?sessionId=..." oder "data: /mcp?sessionId=..."
+          const match = accumulatedText.match(/(?:endpoint|data):\s*([^\s]+)/);
+          
+          if (match && match[1]) {
+            messageEndpoint = match[1];
+            break;
+          }
+          
+          // Timeout-Schutz: Nach 2000 Zeichen abbrechen, falls Endlosschleife
+          if (accumulatedText.length > 2000) break;
+        }
+        
+        reader.releaseLock();
+
+        if (messageEndpoint) {
           // Absolute URL für den darauffolgenden POST-Befehl zusammenbauen
           const postUrl = messageEndpoint.startsWith("http") 
             ? messageEndpoint 
@@ -61,24 +76,26 @@ export async function onRequestPost(context) {
             // JSON-RPC Antwortstruktur auswerten und Text extrahieren
             if (mcpResult.result && mcpResult.result.content && mcpResult.result.content[0]) {
               mevzuatContext = mcpResult.result.content[0].text;
+            } else {
+              // DEBUG: Das Tool wurde aufgerufen, aber liefert keine Daten zurück
+              mevzuatContext = `SYSTEM-DEBUG: Tool erfolgreich aufgerufen, aber result.content war leer. Worker-Antwort: ${JSON.stringify(mcpResult)}`;
             }
+          } else {
+             // DEBUG: Der POST-Request wurde blockiert (z.B. CORS oder 404)
+            mevzuatContext = `SYSTEM-DEBUG: POST an Worker schlug fehl mit HTTP-Status ${toolResponse.status}.`;
           }
+        } else {
+          // DEBUG: Die Session-ID kam nie an
+          mevzuatContext = `SYSTEM-DEBUG: Konnte sessionId nicht aus SSE-Stream extrahieren. Stream-Inhalt war: ${accumulatedText}`;
         }
+      } else {
+         // DEBUG: Der initiale Stream konnte nicht geöffnet werden
+         mevzuatContext = `SYSTEM-DEBUG: GET SSE-Stream schlug fehl mit HTTP-Status ${sseResponse.status}.`;
       }
     } catch (mcpError) {
       console.error("Native Edge-MCP Abfrage fehlgeschlagen:", mcpError);
-      
-      // FALLBACK: Wenn der MCP-Server blockiert, laden wir die lokale JSON-Datenbank
-      try {
-        const origin = new URL(context.request.url).origin;
-        const dbResponse = await fetch(`${origin}/istanbul_database.json`);
-        if (dbResponse.ok) {
-          const database = await dbResponse.json();
-          mevzuatContext = JSON.stringify(database);
-        }
-      } catch (dbError) {
-        // Ignorieren, damit die KI im Notfall mit ihrem eigenen Wissen antwortet
-      }
+      // DEBUG: Es gab einen Code-Crash (z.B. Netzwerk-Timeout)
+      mevzuatContext = `SYSTEM-DEBUG: Code-Exception aufgetreten: ${mcpError.message}`;
     }
 
     // ==========================================================
