@@ -9,21 +9,18 @@ export async function onRequestPost(context) {
     const { message, agentStep, toolName, toolResult, availableTools } = body;
     const ai = context.env.AI;
 
-    if (!message) {
-      return new Response(JSON.stringify({ status: "final_reply", reply: "Keine Nachricht." }), { status: 400, headers });
-    }
-
+    // SCHRITT 1: Router - Entschiede strikt ob Tool-Call oder Final-Reply
     if (agentStep === "init") {
-      // PROMPT OPTIMIERUNG: Striktes JSON erzwingen
       const routerPrompt = `
-        Du bist ein präziser Legal-Agent. Deine Aufgabe ist es, aus den verfügbaren Tools das beste für die Anfrage auszuwählen.
+        Du bist ein KI-Agent für Demirhan.Living.
+        Analysiere die Nutzeranfrage: "${message}"
         Verfügbare Tools: ${JSON.stringify(availableTools)}
+
+        Du MUSST eine dieser zwei JSON-Antworten geben:
+        1. Wenn ein Tool helfen kann: {"status": "tool_call", "toolName": "NAME_DES_TOOLS", "arguments": {"query": "..."}}
+        2. Wenn kein Tool passt: {"status": "final_reply", "reply": "Dein Text hier"}
         
-        Regeln:
-        1. Antworte EXKLUSIV als JSON-Objekt.
-        2. Kein einleitender oder nachfolgender Text.
-        3. Wenn du ein Tool nutzt, antworte: {"status": "tool_call", "toolName": "NAME", "arguments": { ... }}
-        4. Wenn kein Tool passt, antworte: {"status": "final_reply", "reply": "TEXT"}
+        Antworte nur mit dem JSON-Objekt.
       `;
 
       const res = await ai.run('@cf/google/gemma-4-26b-a4b-it', {
@@ -31,26 +28,22 @@ export async function onRequestPost(context) {
         response_format: { type: "json_object" }
       });
       
-      // Rückgabe der KI-Entscheidung
-      const aiJson = res.response || res;
-      return new Response(JSON.stringify(aiJson), { headers });
+      return new Response(JSON.stringify(res.response || res), { headers });
     }
 
+    // SCHRITT 2: Synthese - Verarbeite Tool-Ergebnis
     if (agentStep === "tool_result") {
-      const systemPrompt = `Antworte präzise auf Basis der Daten: ${JSON.stringify(toolResult)}`;
+      const synthesisePrompt = `Beantworte die Frage "${message}" basierend auf diesen Daten: ${JSON.stringify(toolResult)}`;
       const res = await ai.run('@cf/google/gemma-4-26b-a4b-it', {
-        messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }]
+        messages: [{ role: 'system', content: synthesisePrompt }]
       });
       
       return new Response(JSON.stringify({ status: "final_reply", reply: res.response }), { headers });
     }
 
-    return new Response(JSON.stringify({ status: "final_reply", reply: "Router-Fehler: Keine Logik für diesen Schritt gefunden." }), { status: 200, headers });
+    return new Response(JSON.stringify({ status: "final_reply", reply: "Fehler: Unbekannter Schritt." }), { status: 200, headers });
 
   } catch (err) {
-    return new Response(JSON.stringify({ status: "final_reply", reply: "Systemfehler im Backend: " + err.message }), { 
-      status: 200, 
-      headers 
-    });
+    return new Response(JSON.stringify({ status: "final_reply", reply: "Fehler: " + err.message }), { status: 200, headers });
   }
 }
