@@ -2,13 +2,12 @@ export async function onRequestPost(context) {
   // Zentrale Header-Konfiguration
 // ...
 // Aktualisierte Header-Logik
+// Nur das Nötigste für eine API
 const headers = { 
     'Content-Type': 'application/json; charset=utf-8',
-    'X-Content-Type-Options': 'nosniff',
-    'Cache-Control': 'no-cache, no-store, must-revalidate', // Die "Standard-Lösung" gegen Browser-Warnungen
-    'Pragma': 'no-cache',
-    'Expires': '0'
+    'X-Content-Type-Options': 'nosniff'
 };
+// Lösche 'Cache-Control', 'Pragma' und 'Expires' komplett aus dem Objekt!
 // ...
 
   try {
