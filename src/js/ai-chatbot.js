@@ -69,11 +69,15 @@ window.sendMessage = async function(event) {
             removeMessage(loadingId);
             appendMessage('system', decision.reply || "Keine Antwort vom Agenten.");
         }
+// ...
     } catch (error) {
-        console.error('Detaillierter Fehler:', error);
+        // SCHLÜSSEL-DEBUG: Hier sehen wir den echten Fehler direkt im Chat
+        const errorMessage = `DEBUG: ${error.name} - ${error.message}`;
+        console.error(errorMessage);
         removeMessage(loadingId);
-        appendMessage('system', 'Fehler: ' + error.message);
+        appendMessage('system', errorMessage); 
     }
+// ...
 };
 
 function appendMessage(sender, text) {
