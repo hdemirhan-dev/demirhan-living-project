@@ -1,4 +1,26 @@
-// Globale Sichtbarkeit für HTML-Events
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+
+// --- 1. MCP DATENBANK VERBINDUNG ---
+let mcpClient = null;
+let availableTools = [];
+
+async function initMcpConnection() {
+    try {
+        mcpClient = new Client({ name: "demirhan-living-ui", version: "1.0.0" });
+        const transport = new SSEClientTransport(new URL("https://demirhan-mevzuat-mcp.hdpasso29.workers.dev/mcp"));
+        await mcpClient.connect(transport);
+        const toolList = await mcpClient.listTools();
+        availableTools = toolList.tools;
+        console.log("🛠️ Tools bereit:", availableTools.length);
+    } catch (error) { 
+        console.error("MCP Init Fehler:", error); 
+    }
+}
+initMcpConnection();
+
+
+// --- 2. UI LOGIK (Fenster öffnen/schließen) ---
 window.toggleChat = toggleChat;
 window.sendMessage = sendMessage;
 
@@ -17,68 +39,98 @@ function toggleChat() {
     }
 }
 
+
+// --- 3. CHAT LOGIK (Nachrichten senden & Tools abrufen) ---
 async function sendMessage(event) {
     event.preventDefault();
     
     const inputField = document.getElementById('user-input');
-    const chatBox = document.getElementById('chat-box');
-    const userMessage = inputField.value.trim();
+    const userText = inputField.value.trim();
     
-    if (!userMessage) return;
-    
-    // Nachricht des Nutzers sicher einfügen
-    const userDiv = document.createElement('div');
-    userDiv.className = 'chat-msg user-msg';
-    userDiv.textContent = userMessage;
-    chatBox.appendChild(userDiv);
+    if (!userText) return;
+
+    // Härtester Check, ob die Tools wirklich da sind
+    if (!mcpClient || availableTools.length === 0) {
+        appendMessage('system', "Fehler: Die Rechts-Datenbank konnte nicht verbunden werden (Tools laden nicht). Bitte lade die Seite neu oder prüfe die F12-Konsole auf CORS-Fehler.");
+        return;
+    }
+
+    appendMessage('user', userText);
     inputField.value = '';
-    
-    // Lade-Indikator
-    const loadingId = 'loading-' + Date.now();
-    const loadDiv = document.createElement('div');
-    loadDiv.id = loadingId;
-    loadDiv.className = 'chat-msg system-msg';
-    loadDiv.style.fontStyle = 'italic';
-    loadDiv.textContent = 'Analysiere Datenbank...';
-    chatBox.appendChild(loadDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    const loadingId = appendMessage('system', 'Analysiere Rechtslage...');
 
     try {
-        const response = await fetch('/api/chat', {
+        // SCHRITT 1: Router-Entscheidung vom Backend abrufen
+        const firstResponse = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: userMessage })
+            body: JSON.stringify({ message: userText, agentStep: "init", availableTools })
         });
         
-        const data = await response.json();
-        const loadingElement = document.getElementById(loadingId);
-        if (loadingElement) loadingElement.remove();
-        
-        if (!response.ok || data.error) {
-            throw new Error(data.error || 'Serverfehler');
-        }
-        
-        // Antwort-Formatierung
-        if (data.reply) {
-            let formattedReply = data.reply
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/\n/g, '<br>');
+        const decision = await firstResponse.json();
+
+        // SCHRITT 2: Tool-Call im Frontend ausführen
+        if (decision.status === "tool_call") {
+            updateMessageText(loadingId, `Recherchiere mit: ${decision.toolName}...`);
             
-            const replyDiv = document.createElement('div');
-            replyDiv.className = 'chat-msg reply-msg';
-            replyDiv.innerHTML = formattedReply; // Hier ist innerHTML okay, da der Text von deiner KI kommt
-            chatBox.appendChild(replyDiv);
+            const toolResponse = await mcpClient.callTool({
+                name: decision.toolName,
+                arguments: decision.arguments
+            });
+            
+            const toolResultData = toolResponse.content?.[0]?.text || "Kein Inhalt zurückgegeben.";
+            
+            // SCHRITT 3: Synthese vom Agenten abrufen
+            const secondResponse = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    message: userText, 
+                    agentStep: "tool_result", 
+                    toolResult: toolResultData 
+                })
+            });
+
+            const finalData = await secondResponse.json();
+            removeMessage(loadingId);
+            appendMessage('system', finalData.reply);
+        } else {
+            removeMessage(loadingId);
+            appendMessage('system', decision.reply || "Keine Antwort vom Agenten.");
         }
-        
     } catch (error) {
-        const loadingElement = document.getElementById(loadingId);
-        if (loadingElement) loadingElement.remove();
-        
-        const errDiv = document.createElement('div');
-        errDiv.className = 'chat-msg error-msg';
-        errDiv.textContent = 'Verbindungsfehler zur Edge-Infrastruktur.';
-        chatBox.appendChild(errDiv);
+        console.error('Detaillierter Fehler:', error);
+        removeMessage(loadingId);
+        appendMessage('system', 'System-Fehler: ' + error.message);
     }
+}
+
+
+// --- 4. HILFSFUNKTIONEN (Nachrichten ins HTML rendern) ---
+function appendMessage(sender, text) {
+    const chatBox = document.getElementById('chat-box');
+    const msgDiv = document.createElement('div');
+    const msgId = 'msg-' + Date.now();
+    msgDiv.id = msgId;
+    msgDiv.className = 'chat-msg ' + (sender === 'user' ? 'user-msg' : 'system-msg');
+    
+    // Markdown-Formatierung wie in deinem alten Code
+    let formattedText = text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
+        
+    msgDiv.innerHTML = formattedText;
+    chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
+    return msgId;
+}
+
+function removeMessage(id) { 
+    document.getElementById(id)?.remove(); 
+}
+
+function updateMessageText(id, text) { 
+    const el = document.getElementById(id); 
+    if(el) el.innerHTML = text; 
 }
