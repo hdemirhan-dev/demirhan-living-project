@@ -1,14 +1,8 @@
 export async function onRequestPost(context) {
-  // Zentrale Header-Konfiguration
-// ...
-// Aktualisierte Header-Logik
-// Nur das Nötigste für eine API
-const headers = { 
+  const headers = { 
     'Content-Type': 'application/json; charset=utf-8',
     'X-Content-Type-Options': 'nosniff'
-};
-// Lösche 'Cache-Control', 'Pragma' und 'Expires' komplett aus dem Objekt!
-// ...
+  };
 
   try {
     const body = await context.request.json();
@@ -20,11 +14,16 @@ const headers = {
     }
 
     if (agentStep === "init") {
+      // PROMPT OPTIMIERUNG: Striktes JSON erzwingen
       const routerPrompt = `
-        Analysiere diese Tools: ${JSON.stringify(availableTools)}
-        Nutzerfrage: "${message}"
-        Antworte NUR mit validem JSON. Beispiel: { "status": "tool_call", "toolName": "...", "arguments": {...} } 
-        oder { "status": "final_reply", "reply": "..." }
+        Du bist ein präziser Legal-Agent. Deine Aufgabe ist es, aus den verfügbaren Tools das beste für die Anfrage auszuwählen.
+        Verfügbare Tools: ${JSON.stringify(availableTools)}
+        
+        Regeln:
+        1. Antworte EXKLUSIV als JSON-Objekt.
+        2. Kein einleitender oder nachfolgender Text.
+        3. Wenn du ein Tool nutzt, antworte: {"status": "tool_call", "toolName": "NAME", "arguments": { ... }}
+        4. Wenn kein Tool passt, antworte: {"status": "final_reply", "reply": "TEXT"}
       `;
 
       const res = await ai.run('@cf/google/gemma-4-26b-a4b-it', {
@@ -32,6 +31,7 @@ const headers = {
         response_format: { type: "json_object" }
       });
       
+      // Rückgabe der KI-Entscheidung
       const aiJson = res.response || res;
       return new Response(JSON.stringify(aiJson), { headers });
     }
@@ -45,10 +45,10 @@ const headers = {
       return new Response(JSON.stringify({ status: "final_reply", reply: res.response }), { headers });
     }
 
-    return new Response(JSON.stringify({ status: "final_reply", reply: "Unbekannter Fehler." }), { status: 200, headers });
+    return new Response(JSON.stringify({ status: "final_reply", reply: "Router-Fehler: Keine Logik für diesen Schritt gefunden." }), { status: 200, headers });
 
   } catch (err) {
-    return new Response(JSON.stringify({ status: "final_reply", reply: "Systemfehler: " + err.message }), { 
+    return new Response(JSON.stringify({ status: "final_reply", reply: "Systemfehler im Backend: " + err.message }), { 
       status: 200, 
       headers 
     });
