@@ -6,7 +6,7 @@ export async function onRequestPost(context) {
     const { message, agentStep, toolResult, availableTools } = body;
     const ai = context.env.AI;
 
-    const AI_MODEL = '@cf/meta/llama-3.1-8b-instruct';
+    const AI_MODEL = '@cf/google/gemma-4-26b-a4b-it';
 
     // Helper: robustly extract text from AI response regardless of shape
     const extractText = (res) => {
