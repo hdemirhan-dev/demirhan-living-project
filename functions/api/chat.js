@@ -10,6 +10,9 @@ export async function onRequestPost(context) {
 
     // Helper: robustly extract text from AI response regardless of shape
     const extractText = (res) => {
+      // OpenAI-kompatibles Format (gemma-4, etc.)
+      if (res?.choices?.[0]?.message?.content) return res.choices[0].message.content;
+      // Cloudflare Legacy-Format
       if (typeof res?.response === 'string') return res.response;
       if (typeof res === 'string') return res;
       if (res?.result?.response) return res.result.response;
