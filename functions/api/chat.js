@@ -1,108 +1,140 @@
 export async function onRequestPost(context) {
   const headers = { 'Content-Type': 'application/json; charset=utf-8' };
+  const MEVZUAT_MCP_URL = "https://demirhan-mevzuat-mcp.hdpasso29.workers.dev/";
+  const KV = context.env.TOOLS_CACHE;
+  const CACHE_TTL = 86400;
+  const MAX_STEPS = 2;
+  const AI_MODEL = '@cf/google/gemma-4-26b-a4b-it';
+
+  const extractText = (res) => {
+    if (res?.choices?.[0]?.message?.content) return res.choices[0].message.content;
+    if (typeof res?.response === 'string') return res.response;
+    if (typeof res === 'string') return res;
+    if (res?.result?.response) return res.result.response;
+    return JSON.stringify(res);
+  };
+
+  const extractJson = (text) => {
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+    try { return JSON.parse(match[0]); } catch { return null; }
+  };
+
+  const getTools = async () => {
+    if (KV) {
+      const cached = await KV.get("mevzuat_tools", "json");
+      if (cached) return cached;
+    }
+    const res = await fetch(MEVZUAT_MCP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list", params: {} })
+    });
+    const data = await res.json();
+    const tools = data?.result?.tools || [];
+    const slimTools = tools.map(t => ({
+      name: t.name,
+      description: t.description,
+      parameters: t.inputSchema?.properties
+        ? Object.fromEntries(Object.entries(t.inputSchema.properties).map(([k, v]) => [k, v.description || v.type]))
+        : {}
+    }));
+    if (KV) await KV.put("mevzuat_tools", JSON.stringify(slimTools), { expirationTtl: CACHE_TTL });
+    return slimTools;
+  };
+
+  const callMcpTool = async (toolName, args) => {
+    const res = await fetch(MEVZUAT_MCP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: Date.now(),
+        method: "tools/call",
+        params: { name: toolName, arguments: args || {} }
+      })
+    });
+    const data = await res.json();
+    return data?.result?.content?.[0]?.text || data?.result || data;
+  };
+
+  const SYSTEM_PROMPT = `Du bist ein Rechercheassistent für türkisches Recht/Steuerrecht auf demirhan.living.
+Verstehe die SEMANTISCHE Absicht der Frage (z.B. "Begründung des Gesetzgebers" = Gerekçe, "was steht in Artikel X" = Artikeltext), nicht nur Stichworte.
+Übersetze die Anfrage in passende Suchbegriffe für die Solr/Keyword-Tools (Synonyme, Kurz-/Langform).
+Gesetzesnummern wie "7582" = türkisches Gesetz (Kanun), Resmî Gazete.
+Wenn search_* eine mevzuat_id/gerekce_id liefert, nutze sie gezielt im nächsten Schritt (get_mevzuat_content / get_mevzuat_gerekce / get_mevzuat_madde_tree / search_within_*).
+Antworte NIEMALS mit "ich brauche mehr Infos", solange du noch einen Versuch übrig hast.
+
+ANTWORTE AUSSCHLIESSLICH MIT EINEM JSON-OBJEKT, OHNE ERKLÄRUNG, OHNE MARKDOWN:
+{"status": "tool_call", "toolName": "NAME", "arguments": {...}, "reasoning": "kurz"} oder
+{"status": "final_reply", "reply": "TEXT AUF DEUTSCH"}`;
 
   try {
     const body = await context.request.json();
-    const { message, agentStep, toolResult, availableTools } = body;
+    const { message } = body;
     const ai = context.env.AI;
 
-    const AI_MODEL = '@cf/google/gemma-4-26b-a4b-it';
+    const tools = await getTools();
+    const history = [];
+    let finalReply = null;
 
-    // Helper: robustly extract text from AI response regardless of shape
-    const extractText = (res) => {
-      // OpenAI-kompatibles Format (gemma-4, etc.)
-      if (res?.choices?.[0]?.message?.content) return res.choices[0].message.content;
-      // Cloudflare Legacy-Format
-      if (typeof res?.response === 'string') return res.response;
-      if (typeof res === 'string') return res;
-      if (res?.result?.response) return res.result.response;
-      return JSON.stringify(res);
-    };
+    for (let step = 0; step < MAX_STEPS; step++) {
+      const contextBlock = history.length
+        ? `\n\nBisherige Schritte:\n${history.map((h, i) => `Schritt ${i + 1}: Tool=${h.toolName} (${h.reasoning})\nErgebnis: ${JSON.stringify(h.result).slice(0, 1200)}`).join('\n\n')}`
+        : '';
 
-    // Helper: try to parse JSON object out of model text
-    const extractJson = (text) => {
-      const match = text.match(/\{[\s\S]*\}/);
-      if (!match) return null;
-      try {
-        return JSON.parse(match[0]);
-      } catch {
-        return null;
-      }
-    };
+      const lastStepNote = step === MAX_STEPS - 1
+        ? '\n\nWICHTIG: Letzter Schritt — antworte zwingend mit final_reply basierend auf dem bisher Gefundenen.'
+        : '';
 
-    // PFAD 1: Synthese nach Tool-Ergebnis
-    if (agentStep === "tool_result") {
+      const prompt = `Nutzeranfrage: "${message}"
+
+Verfügbare Tools:
+${JSON.stringify(tools)}${contextBlock}${lastStepNote}`;
+
       const res = await ai.run(AI_MODEL, {
         messages: [
-          {
-            role: 'system',
-            content: 'Du bist ein hilfreicher Assistent für steuerliche Fragen. Antworte präzise und auf Deutsch.'
-          },
-          {
-            role: 'user',
-            content: `Ursprüngliche Frage: "${message}"\n\nToolErgebnis: ${JSON.stringify(toolResult)}\n\nFormuliere eine klare Antwort basierend auf diesem Ergebnis.`
-          }
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: prompt }
         ]
       });
 
-      const reply = extractText(res) || "Es gab leider keine Antwort vom Modell.";
-      return new Response(JSON.stringify({ status: "final_reply", reply }), { headers });
-    }
+      const text = extractText(res);
+      const parsed = extractJson(text);
 
-    // PFAD 2: Router (Standardfall: agentStep fehlt oder "init")
-    const tools = Array.isArray(availableTools) ? availableTools : [];
-
-    const prompt = `Analysiere die folgende Nutzeranfrage und entscheide, ob ein Tool benötigt wird.
-
-Anfrage: "${message}"
-
-Verfügbare Tools: ${JSON.stringify(tools)}
-
-ANTWORTE AUSSCHLIESSLICH MIT EINEM JSON-OBJEKT, OHNE ERKLÄRUNGEN, OHNE MARKDOWN, IN GENAU EINER DIESER FORMEN:
-{"status": "tool_call", "toolName": "NAME_DES_TOOLS", "arguments": {"query": "..."}}
-{"status": "final_reply", "reply": "DEINE ANTWORT AUF DEUTSCH"}`;
-
-    const res = await ai.run(AI_MODEL, {
-      messages: [
-        {
-          role: 'system',
-          content: 'Du antwortest IMMER nur mit validem JSON, niemals mit Fließtext oder Markdown-Codeblöcken.'
-        },
-        { role: 'user', content: prompt }
-      ]
-    });
-
-    const text = extractText(res);
-    const parsed = extractJson(text);
-
-    if (!parsed) {
-      // Model didn't return valid JSON — treat raw text as final reply
-      return new Response(JSON.stringify({ status: "final_reply", reply: text || "Entschuldigung, ich konnte keine Antwort generieren." }), { headers });
-    }
-
-    // Validate tool_call structure
-    if (parsed.status === "tool_call") {
-      const validTool = tools.find(t => (t.name || t) === parsed.toolName);
-      if (!validTool) {
-        // Hallucinated tool name — fall back to final_reply
-        return new Response(JSON.stringify({
-          status: "final_reply",
-          reply: parsed.reply || "Entschuldigung, dafür habe ich kein passendes Werkzeug."
-        }), { headers });
+      if (!parsed) {
+        finalReply = text || "Entschuldigung, ich konnte keine Antwort generieren.";
+        break;
       }
-      if (!parsed.arguments) parsed.arguments = {};
+
+      if (parsed.status === "final_reply") {
+        finalReply = parsed.reply;
+        break;
+      }
+
+      if (parsed.status === "tool_call") {
+        const validTool = tools.find(t => t.name === parsed.toolName);
+        if (!validTool) {
+          history.push({ toolName: parsed.toolName, reasoning: parsed.reasoning || '', result: { error: "Unbekanntes Tool" } });
+          continue;
+        }
+        const toolResult = await callMcpTool(parsed.toolName, parsed.arguments || {});
+        history.push({ toolName: parsed.toolName, reasoning: parsed.reasoning || '', result: toolResult });
+        continue;
+      }
+
+      finalReply = text;
+      break;
     }
 
-    if (parsed.status !== "tool_call" && parsed.status !== "final_reply") {
-      return new Response(JSON.stringify({ status: "final_reply", reply: text }), { headers });
+    if (!finalReply) {
+      finalReply = "Ich konnte die Frage nicht abschließend beantworten." +
+        (history.length ? ` Versuchte Suchen: ${history.map(h => h.toolName).join(', ')}.` : '');
     }
 
-    return new Response(JSON.stringify(parsed), { headers });
+    return new Response(JSON.stringify({ status: "final_reply", reply: finalReply }), { headers });
 
   } catch (err) {
-    return new Response(JSON.stringify({
-      status: "final_reply",
-      reply: "Es ist ein Fehler aufgetreten: " + err.message
-    }), { headers, status: 200 });
+    return new Response(JSON.stringify({ status: "final_reply", reply: "Es ist ein Fehler aufgetreten: " + err.message }), { headers });
   }
 }
