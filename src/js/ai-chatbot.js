@@ -24,8 +24,6 @@ window.sendMessage = async function(event) {
     const userText = inputField.value.trim();
     
     if (!userText) return;
-
-    // Schutz: Wenn MCP noch nicht bereit ist
     if (!mcpClient) {
         appendMessage('system', "Fehler: Verbindung zur Rechtsdatenbank wird aufgebaut. Bitte 3 Sekunden warten...");
         return;
@@ -43,15 +41,9 @@ window.sendMessage = async function(event) {
             body: JSON.stringify({ message: userText, agentStep: "init", availableTools })
         });
         
-        const rawDecision = await firstResponse.text();
-        let decision;
-        try {
-            decision = JSON.parse(rawDecision);
-        } catch (e) {
-            throw new Error("Backend lieferte kein valides JSON: " + rawDecision.substring(0, 50));
-        }
+        const decision = await firstResponse.json();
 
-        // SCHRITT 2: Tool-Call ausführen oder direkt antworten
+        // SCHRITT 2: Tool-Call im Frontend über sichere SSE-Verbindung ausführen
         if (decision.status === "tool_call") {
             updateMessageText(loadingId, `Recherchiere mit: ${decision.toolName}...`);
             
@@ -62,14 +54,13 @@ window.sendMessage = async function(event) {
             
             const toolResultData = toolResponse.content?.[0]?.text || "Kein Inhalt zurückgegeben.";
             
-            // SCHRITT 3: Finale Synthese vom Agenten
+            // SCHRITT 3: Synthese vom Agenten abrufen
             const secondResponse = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     message: userText, 
                     agentStep: "tool_result", 
-                    toolName: decision.toolName, 
                     toolResult: toolResultData 
                 })
             });
@@ -88,7 +79,7 @@ window.sendMessage = async function(event) {
     }
 };
 
-// Hilfsfunktionen für das DOM
+// Hilfsfunktionen
 function appendMessage(sender, text) {
     const chatBox = document.getElementById('chat-box');
     const msgDiv = document.createElement('div');
@@ -100,6 +91,5 @@ function appendMessage(sender, text) {
     chatBox.scrollTop = chatBox.scrollHeight;
     return msgId;
 }
-
 function removeMessage(id) { document.getElementById(id)?.remove(); }
 function updateMessageText(id, text) { const el = document.getElementById(id); if(el) el.innerHTML = text; }
