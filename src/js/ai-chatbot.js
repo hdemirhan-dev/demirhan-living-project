@@ -24,8 +24,10 @@ window.sendMessage = async function(event) {
     const userText = inputField.value.trim();
     
     if (!userText) return;
-    if (!mcpClient) {
-        appendMessage('system', "Fehler: Verbindung zur Rechtsdatenbank wird aufgebaut. Bitte 3 Sekunden warten...");
+
+    // NEU: Härtester Check, ob die Tools wirklich da sind
+    if (!mcpClient || availableTools.length === 0) {
+        appendMessage('system', "Fehler: Die Rechts-Datenbank konnte nicht verbunden werden (Tools laden nicht). Bitte öffne die F12-Konsole, um den genauen CORS- oder Netzwerkfehler zu sehen.");
         return;
     }
 
@@ -34,6 +36,7 @@ window.sendMessage = async function(event) {
     const loadingId = appendMessage('system', 'Analysiere Rechtslage...');
 
     try {
+        // ... ab hier bleibt dein bestehender Code für den fetch('/api/chat' ...) gleich
         // SCHRITT 1: Router-Entscheidung vom Backend abrufen
         const firstResponse = await fetch('/api/chat', {
             method: 'POST',
