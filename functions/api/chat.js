@@ -1,10 +1,13 @@
 export async function onRequestPost(context) {
   // Zentrale Header-Konfiguration
 // ...
+// Aktualisierte Header-Logik
 const headers = { 
-    'Content-Type': 'application/json; charset=utf-8', // WICHTIG: UTF-8 explizit setzen
+    'Content-Type': 'application/json; charset=utf-8',
     'X-Content-Type-Options': 'nosniff',
-    'Cache-Control': 'no-store' // Fix für den "Cache-Control"-Fehler aus image_27b74a.png
+    'Cache-Control': 'no-cache, no-store, must-revalidate', // Die "Standard-Lösung" gegen Browser-Warnungen
+    'Pragma': 'no-cache',
+    'Expires': '0'
 };
 // ...
 
