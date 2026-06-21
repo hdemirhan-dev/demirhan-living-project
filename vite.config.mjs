@@ -1,13 +1,21 @@
 import { defineConfig } from 'vite';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  // Definiert 'src' als die Wurzel deines Frontend-Projekts
   root: 'src',
-  // Sagt Vite, dass der öffentliche Ordner eine Ebene höher liegt
   publicDir: '../public',
-  // Bestimmt, wo die fertigen Produktionsdateien landen sollen
   build: {
-    outDir: '../dist', // Geht eine Ebene höher, um 'dist' im Hauptverzeichnis zu erstellen
+    outDir: '../dist',
     emptyOutDir: true,
-  }
+    // Multi-Page-Build: index.html + dashboard.html
+    rollupOptions: {
+      input: {
+        main     : resolve(__dirname, 'src/index.html'),
+        dashboard: resolve(__dirname, 'src/dashboard.html'),
+      },
+    },
+  },
 });
