@@ -1,0 +1,29 @@
+# Diesen Job in timocom-ai-tests/.gitlab-ci.yml einfügen
+# GITHUB_DEPLOY_TOKEN = GitHub PAT mit scope "repo"
+# Settings → CI/CD → Variables → GITHUB_DEPLOY_TOKEN
+
+publish-dashboard:
+  stage: publish
+  image: alpine/git:latest
+  needs:
+    - job: playwright-tests
+      artifacts: true
+  when: always
+  script:
+    - git config --global user.email "ci@hdquality"
+    - git config --global user.name  "HDQuality CI"
+    # GitHub username hier anpassen falls abweichend
+    - git clone --depth=1
+        "https://hdquality:${GITHUB_DEPLOY_TOKEN}@github.com/hdquality/demirhan.living.git"
+        site-repo
+    - cp test-results.json site-repo/public/test-results.json
+    - cd site-repo
+    - git add public/test-results.json
+    - |
+      git diff --cached --quiet \
+        && echo "Keine Änderungen." \
+        || git commit -m "ci: test-results $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+    - git push origin HEAD:main
+  only:
+    - main
+    - schedules

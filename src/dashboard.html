@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Dashboard · timocom.de · Demirhan Living</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream:       #f5f0e8;
+    --warm-white:  #faf8f4;
+    --ink:         #1a1612;
+    --ink-soft:    #3d3530;
+    --accent:      #c4723a;
+    --accent-light:#e8c4a0;
+    --border:      #ddd5c8;
+    --green:       #3a6b4a;
+    --red:         #8b2e2e;
+    --rail:        #1E293B;
+    --rail-alt:    #263347;
+    --muted:       #94A3B8;
+    --blue:        #2563EB;
+    --pass:        #16A34A;
+    --pass-bg:     #DCFCE7;
+    --fail:        #DC2626;
+    --fail-bg:     #FEE2E2;
+    --skip:        #D97706;
+    --skip-bg:     #FEF3C7;
+    --mono:        'JetBrains Mono', monospace;
+    --sans:        'DM Sans', sans-serif;
+  }
+  html, body { height: 100%; background: var(--warm-white); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.6; }
+
+  /* ── Site header (matches demirhan.living style) ── */
+  .site-header {
+    background: var(--ink);
+    padding: 14px clamp(1.25rem, 5vw, 3rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 200;
+  }
+  .site-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--cream);
+    text-decoration: none;
+    letter-spacing: .06em;
+  }
+  .site-logo span { color: var(--accent-light); }
+  .header-tag {
+    font-size: .7rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    opacity: .7;
+  }
+
+  /* ── Health stripe ── */
+  #health-stripe { height: 4px; display: flex; }
+  .stripe-pass { background: var(--pass); height: 100%; transition: width .6s; }
+  .stripe-fail { background: var(--fail); height: 100%; transition: width .6s; }
+  .stripe-skip { background: var(--skip); height: 100%; transition: width .6s; }
+
+  /* ── Dashboard topbar ── */
+  #dash-bar {
+    background: var(--rail);
+    padding: 0 clamp(1rem, 4vw, 2rem);
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #2d3f55;
+  }
+  .db-brand { font-family: var(--mono); font-size: 12px; font-weight: 700; color: #e2e8f0; }
+  .db-brand span { color: var(--blue); }
+  #scorecard { display: flex; gap: 8px; }
+  .pill { font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 100px; }
+  .pill-pass { background: #134e26; color: #4ade80; }
+  .pill-fail { background: #450a0a; color: #f87171; }
+  .pill-skip { background: #451a03; color: #fbbf24; }
+  .db-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .db-meta { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pass); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .ci-link { font-family: var(--mono); font-size: 10px; color: var(--muted); text-decoration: none; }
+  .ci-link:hover { color: #fff; }
+
+  /* ── Layout ── */
+  #layout { display: grid; grid-template-columns: 260px 1fr; height: calc(100vh - 118px); }
+
+  /* ── Sidebar ── */
+  #sidebar { background: var(--rail); overflow-y: auto; padding: 14px 0; border-right: 1px solid #2d3f55; }
+  .sidebar-label { font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 0 18px 10px; }
+  .suite-item { display: flex; align-items: center; gap: 10px; padding: 9px 18px; cursor: pointer; border-left: 3px solid transparent; transition: background .1s; }
+  .suite-item:hover { background: var(--rail-alt); }
+  .suite-item.active { background: var(--rail-alt); border-left-color: var(--accent); }
+  .suite-icon { font-size: 14px; flex-shrink: 0; }
+  .suite-info { flex: 1; min-width: 0; }
+  .suite-name { font-size: 11px; font-weight: 500; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .suite-sub { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+  .suite-badge { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 100px; flex-shrink: 0; }
+  .badge-pass { background: #134e26; color: #4ade80; }
+  .badge-fail { background: #450a0a; color: #f87171; }
+  .badge-mixed { background: #451a03; color: #fbbf24; }
+
+  /* ── Main panel ── */
+  #main { overflow-y: auto; padding: 24px 28px; background: var(--warm-white); }
+  #loading-state, #error-state, #empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 50vh; color: var(--muted);
+    text-align: center; gap: 10px;
+  }
+  .big-icon { font-size: 38px; }
+  .spinner { width: 26px; height: 26px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #error-state code { font-family: var(--mono); font-size: 11px; background: var(--fail-bg); color: var(--fail); padding: 8px 14px; border-radius: 6px; max-width: 400px; word-break: break-all; }
+
+  /* ── Panel detail ── */
+  .panel-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+  .panel-icon { font-size: 26px; line-height: 1; }
+  .panel-title { font-size: 18px; font-weight: 600; color: var(--ink); }
+  .panel-url { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .panel-dur { margin-left: auto; text-align: right; }
+  .dur-val { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--ink); }
+  .dur-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .suite-progress { height: 4px; border-radius: 100px; background: var(--border); margin-bottom: 20px; overflow: hidden; display: flex; }
+  .prog-pass { background: var(--pass); }
+  .prog-fail { background: var(--fail); }
+  .prog-skip { background: var(--skip); }
+
+  /* ── Test cards ── */
+  .test-list { display: flex; flex-direction: column; gap: 7px; }
+  .test-card { border: 1px solid var(--border); border-radius: 7px; overflow: hidden; cursor: pointer; transition: box-shadow .15s; background: #fff; }
+  .test-card:hover { box-shadow: 0 2px 8px rgba(26,22,18,.08); }
+  .tc-header { display: flex; align-items: center; gap: 10px; padding: 11px 14px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot-pass { background: var(--pass); }
+  .dot-fail { background: var(--fail); box-shadow: 0 0 0 3px #fee2e2; }
+  .dot-skip { background: var(--skip); }
+  .tc-name { font-family: var(--mono); font-size: 11px; font-weight: 500; flex: 1; color: var(--ink); }
+  .tc-time { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .tc-tag { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+  .tag-pass { background: var(--pass-bg); color: var(--pass); }
+  .tag-fail { background: var(--fail-bg); color: var(--fail); }
+  .tag-skip { background: var(--skip-bg); color: var(--skip); }
+  .tc-detail { display: none; padding: 10px 14px; border-top: 1px solid var(--border); background: #faf8f4; }
+  .test-card.open .tc-detail { display: block; }
+  .detail-row { display: flex; gap: 8px; margin-bottom: 5px; }
+  .detail-key { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); width: 70px; flex-shrink: 0; padding-top: 2px; }
+  .detail-val { font-family: var(--mono); font-size: 10px; color: var(--ink); flex: 1; word-break: break-all; }
+  .error-block { background: var(--fail-bg); border: 1px solid #fca5a5; border-radius: 5px; padding: 9px 11px; font-family: var(--mono); font-size: 10px; color: var(--fail); margin-top: 8px; white-space: pre-wrap; }
+  .run-footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 9px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+
+  @media (max-width: 660px) {
+    #layout { grid-template-columns: 1fr; height: auto; }
+    #sidebar { height: auto; max-height: 40vh; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Site header — matches demirhan.living branding -->
+<header class="site-header">
+  <a href="https://demirhan.living" class="site-logo">Demirhan<span>.</span>Living</a>
+  <span class="header-tag">QA Portfolio · timocom.de</span>
+</header>
+
+<!-- Health stripe -->
+<div id="health-stripe">
+  <div class="stripe-pass" id="s-pass" style="width:0"></div>
+  <div class="stripe-fail" id="s-fail" style="width:0"></div>
+  <div class="stripe-skip" id="s-skip" style="width:0"></div>
+</div>
+
+<!-- Dashboard bar -->
+<div id="dash-bar">
+  <div class="db-brand"><span>⬡</span> timocom.de · <span>synthetic tests</span></div>
+  <div id="scorecard"></div>
+  <div class="db-right">
+    <div class="live-dot" id="live-dot"></div>
+    <span class="db-meta" id="run-time">Loading…</span>
+    <a href="https://gitlab.com/hdquality/timocom-ai-tests/-/pipelines"
+       target="_blank" class="ci-link">↗ CI Pipeline</a>
+  </div>
+</div>
+
+<!-- Main layout -->
+<div id="layout">
+  <div id="sidebar">
+    <div class="sidebar-label">Test Suites</div>
+    <div id="suite-list"></div>
+  </div>
+  <div id="main">
+    <div id="loading-state">
+      <div class="spinner"></div>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">Fetching test-results.json…</span>
+    </div>
+    <div id="error-state" style="display:none">
+      <div class="big-icon">⚠️</div>
+      <strong style="color:var(--ink)">Could not load test results</strong>
+      <code id="err-msg"></code>
+      <p style="font-size:12px">Make sure <code style="background:none;padding:0">test-results.json</code> is in the site root.</p>
+    </div>
+    <div id="empty-state" style="display:none">
+      <div class="big-icon">🧪</div>
+      <strong style="color:var(--ink)">Select a suite</strong>
+      <p style="font-size:12px;color:var(--muted)">Pick a test suite from the left to see results.</p>
+    </div>
+    <div id="detail-panel" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+let DATA = null, activeId = null;
+
+async function load() {
+  try {
+    const res = await fetch('./test-results.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status} – ${res.statusText}`);
+    DATA = await res.json();
+    onLoaded();
+  } catch (e) { showError(e.message); }
+}
+
+function showError(msg) {
+  hide('loading-state'); show('error-state');
+  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('live-dot').style.background = 'var(--fail)';
+  document.getElementById('run-time').textContent = 'No data';
+}
+
+function onLoaded() {
+  hide('loading-state'); show('empty-state');
+  renderGlobal(); renderSidebar();
+  if (DATA.suites?.length) selectSuite(DATA.suites[0].id);
+}
+
+function counts(suite) {
+  const r = { pass:0, fail:0, skip:0 };
+  (suite.tests||[]).forEach(t => { r[t.status]=(r[t.status]||0)+1; });
+  return r;
+}
+function allCounts() {
+  let p=0,f=0,s=0;
+  (DATA.suites||[]).forEach(suite => { const c=counts(suite); p+=c.pass; f+=c.fail; s+=c.skip; });
+  return {p,f,s};
+}
+function fmtDate(iso) {
+  if (!iso) return '–';
+  try { return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short' }); }
+  catch { return iso; }
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function show(id) { document.getElementById(id).style.display = 'flex'; }
+
+function renderGlobal() {
+  const {p,f,s} = allCounts();
+  const total = (p+f+s)||1;
+  document.getElementById('s-pass').style.width = (p/total*100)+'%';
+  document.getElementById('s-fail').style.width = (f/total*100)+'%';
+  document.getElementById('s-skip').style.width = (s/total*100)+'%';
+  document.getElementById('scorecard').innerHTML =
+    `<div class="pill pill-pass">✓ ${p} passed</div>` +
+    (f ? `<div class="pill pill-fail">✗ ${f} failed</div>` : '') +
+    (s ? `<div class="pill pill-skip">⊘ ${s} skipped</div>` : '');
+  const meta = DATA.meta||{};
+  document.getElementById('run-time').textContent = meta.runAt ? 'Run: '+fmtDate(meta.runAt) : '–';
+  document.getElementById('live-dot').style.background = f>0 ? 'var(--fail)' : 'var(--pass)';
+}
+
+function renderSidebar() {
+  document.getElementById('suite-list').innerHTML = (DATA.suites||[]).map(s => {
+    const c = counts(s);
+    const cls = c.fail>0 ? 'badge-fail' : c.skip>0 ? 'badge-mixed' : 'badge-pass';
+    const txt = c.fail>0 ? `${c.fail} failed` : c.skip>0 ? `${c.skip} skipped` : 'all pass';
+    return `<div class="suite-item ${s.id===activeId?'active':''}" onclick="selectSuite('${esc(s.id)}')">
+      <div class="suite-icon">${s.icon||'🧪'}</div>
+      <div class="suite-info">
+        <div class="suite-name">${esc(s.name)}</div>
+        <div class="suite-sub">${(s.tests||[]).length} tests · ${s.duration||'–'}</div>
+      </div>
+      <div class="suite-badge ${cls}">${txt}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDetail(suite) {
+  const c = counts(suite);
+  const total = (suite.tests||[]).length||1;
+  const tests = (suite.tests||[]).map((t,i) => `
+    <div class="test-card" id="tc-${i}" onclick="toggleCard(${i})">
+      <div class="tc-header">
+        <div class="status-dot dot-${t.status}"></div>
+        <div class="tc-name">${esc(t.name)}</div>
+        ${t.ms ? `<div class="tc-time">${t.ms} ms</div>` : ''}
+        <div class="tc-tag tag-${t.status}">${(t.status||'').toUpperCase()}</div>
+      </div>
+      <div class="tc-detail">
+        ${t.locator ? `<div class="detail-row"><div class="detail-key">Locator</div><div class="detail-val">${esc(t.locator)}</div></div>` : ''}
+        ${t.step    ? `<div class="detail-row"><div class="detail-key">Step</div><div class="detail-val">${esc(t.step)}</div></div>` : ''}
+        ${t.retry   ? `<div class="detail-row"><div class="detail-key">Retry</div><div class="detail-val">${t.retry}×</div></div>` : ''}
+        ${t.error   ? `<div class="error-block">${esc(t.error)}</div>` : ''}
+      </div>
+    </div>`).join('');
+  const meta = DATA.meta||{};
+  document.getElementById('detail-panel').innerHTML = `
+    <div class="panel-header">
+      <div class="panel-icon">${suite.icon||'🧪'}</div>
+      <div>
+        <div class="panel-title">${esc(suite.name)}</div>
+        ${suite.url ? `<div class="panel-url">${esc(suite.url)}</div>` : ''}
+      </div>
+      <div class="panel-dur">
+        <div class="dur-val">${suite.duration||'–'}</div>
+        <div class="dur-lbl">duration</div>
+      </div>
+    </div>
+    <div class="suite-progress">
+      <div class="prog-pass" style="width:${(c.pass/total*100).toFixed(1)}%"></div>
+      <div class="prog-fail" style="width:${(c.fail/total*100).toFixed(1)}%"></div>
+      <div class="prog-skip" style="width:${(c.skip/total*100).toFixed(1)}%"></div>
+    </div>
+    <div class="test-list">${tests||'<p style="color:var(--muted);font-size:12px">No tests.</p>'}</div>
+    <div class="run-footer">
+      <span>${esc(meta.project||'timocom-ai-tests')} · <a href="${esc(meta.source||'#')}" target="_blank" style="color:inherit">${esc(meta.source||'')}</a></span>
+      <span>Run: ${fmtDate(meta.runAt)} · ${esc(meta.browser||'Playwright')}</span>
+    </div>`;
+}
+
+function selectSuite(id) {
+  activeId = id;
+  const suite = (DATA.suites||[]).find(s => s.id===id);
+  if (!suite) return;
+  hide('empty-state');
+  document.getElementById('detail-panel').style.display = 'block';
+  renderDetail(suite); renderSidebar();
+}
+function toggleCard(i) { document.getElementById(`tc-${i}`)?.classList.toggle('open'); }
+
+load();
+</script>
+</body>
+</html>
