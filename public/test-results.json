@@ -1,10 +1,1 @@
-{
-  "meta": {
-    "runAt": null,
-    "finishedAt": null,
-    "browser": "Chromium (Playwright)",
-    "project": "timocom-ai-tests",
-    "source": "https://gitlab.com/hdquality/timocom-ai-tests/-/pipelines"
-  },
-  "suites": []
-}
+{"meta":{"runAt":"2026-06-21T22:14:40Z","browser":"Chromium","project":"timocom-ai-tests"},"suites":[]}
