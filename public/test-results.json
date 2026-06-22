@@ -1,10 +1,227 @@
 {
   "meta": {
-    "runAt": null,
-    "finishedAt": null,
+    "runAt": "2026-06-22T08:02:09.900Z",
+    "finishedAt": "2026-06-22T08:04:37.680Z",
     "browser": "Chromium (Playwright)",
     "project": "timocom-ai-tests",
     "source": "https://gitlab.com/hdquality/timocom-ai-tests/-/pipelines"
   },
-  "suites": []
+  "suites": [
+    {
+      "id": "chromium--authneue-benutzer-registrierungspecjs--neue-benutzer-registrierung",
+      "name": "chromium › auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung",
+      "icon": "🔐",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001: Gültige Registrierung — Registrierungsseite erreichbar und Formular vorhanden",
+          "status": "pass",
+          "ms": 9840,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-002: Validierung ungültiger Email — Formular wird nicht abgesendet",
+          "status": "pass",
+          "ms": 9393,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-003: Leere Pflichtfelder — Formular bleibt auf Registrierungsseite",
+          "status": "pass",
+          "ms": 15006,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        }
+      ],
+      "duration": "34.2s"
+    },
+    {
+      "id": "chromium--miscresponsive-design-browser-kompatibilitaetspecjs--responsive-design--browser-kompatibilitt",
+      "name": "chromium › misc/responsive-design-browser-kompatibilitaet.spec.js › Responsive Design & Browser-Kompatibilität",
+      "icon": "📱",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001: Mobile (375px) Navigation — Hamburger-Menü sichtbar, alle Links erreichbar",
+          "status": "pass",
+          "ms": 5587,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-002: Tablet (768px) Layout — Formularfelder sichtbar und ausreichend breit",
+          "status": "pass",
+          "ms": 6044,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-003: Desktop (1920px) Layout — Navigation und Formular vollständig sichtbar",
+          "status": "pass",
+          "ms": 7970,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        }
+      ],
+      "duration": "19.6s"
+    },
+    {
+      "id": "chromium--miscsprachenwechselspecjs--sprachenwechsel",
+      "name": "chromium › misc/sprachenwechsel.spec.js › Sprachenwechsel",
+      "icon": "🌐",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001: Wechsel zu English",
+          "status": "pass",
+          "ms": 9199,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-002: Wechsel zu Español",
+          "status": "pass",
+          "ms": 8786,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-003: Persistenz nach Neuladen",
+          "status": "pass",
+          "ms": 11425,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        }
+      ],
+      "duration": "29.4s"
+    },
+    {
+      "id": "chromium--miscsuchfeld-validierung-autocompletionspecjs--suchfeld-validierung--autocompletion",
+      "name": "chromium › misc/suchfeld-validierung-autocompletion.spec.js › Suchfeld-Validierung & Autocompletion",
+      "icon": "🔍",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001: Gültige Ortseingabe — Suche liefert Ergebnisse",
+          "status": "pass",
+          "ms": 6359,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-002: Spezialzeichen — Seite reagiert stabil ohne Absturz",
+          "status": "pass",
+          "ms": 6518,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-003: Leeres Suchfeld — Seite bleibt stabil",
+          "status": "pass",
+          "ms": 6894,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        }
+      ],
+      "duration": "19.8s"
+    },
+    {
+      "id": "chromium--navigationservices-uebersicht-erkundenspecjs--services-bersicht-erkunden",
+      "name": "chromium › navigation/services-uebersicht-erkunden.spec.js › Services-Übersicht erkunden",
+      "icon": "🧭",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001: Navigation zur Services-Seite",
+          "status": "pass",
+          "ms": 8560,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-002: Frachtenbörse-Seite erreichbar",
+          "status": "pass",
+          "ms": 6669,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-003: Geschlossene Frachtenbörse erreichbar",
+          "status": "pass",
+          "ms": 6712,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        }
+      ],
+      "duration": "21.9s"
+    },
+    {
+      "id": "chromium--searchfrachtenboerse-durchsuchenspecjs--frachtenbrse-durchsuchen",
+      "name": "chromium › search/frachtenboerse-durchsuchen.spec.js › Frachtenbörse durchsuchen",
+      "icon": "🔍",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001: Suche mit Aufbauart-Filter",
+          "status": "pass",
+          "ms": 6932,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-002: Von-Nach Route suchen",
+          "status": "pass",
+          "ms": 6811,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        },
+        {
+          "name": "TC-003: Standardsuche liefert Ergebnisse oder Einblick-Seite",
+          "status": "pass",
+          "ms": 7951,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null
+        }
+      ],
+      "duration": "21.7s"
+    }
+  ]
 }
