@@ -208,6 +208,17 @@
   .kw-ok   { background: #dcfce7; color: #16a34a; }
   .kw-fail { background: #fee2e2; color: #dc2626; }
   .error-note { font-family: var(--mono); font-size: 11px; color: var(--fail); background: var(--fail-bg); padding: 2px 8px; border-radius: 4px; }
+
+  /* ── Web Vitals badges ── */
+  .vitals-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
+  .vitals-metric-name { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); width: 40px; flex-shrink: 0; }
+  .vitals-value { font-family: var(--mono); font-size: 15px; font-weight: 700; flex: 1; }
+  .vitals-badge { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 100px; flex-shrink: 0; }
+  .badge-good  { background: #dcfce7; color: #16a34a; }
+  .badge-needs { background: #fef3c7; color: #d97706; }
+  .badge-poor  { background: #fee2e2; color: #dc2626; }
+  .vitals-bar-wrap { width: 80px; height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; flex-shrink: 0; }
+  .vitals-bar { height: 100%; border-radius: 100px; transition: width .4s; }
   .synth-msg { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 40vh; gap: 12px; color: var(--muted); text-align: center; }
 
   @media (max-width: 660px) {
@@ -374,7 +385,12 @@ function renderSidebar() {
 function renderDetail(suite) {
   const c = counts(suite);
   const total = (suite.tests||[]).length||1;
-  const tests = (suite.tests||[]).map((t,i) => `
+  const isVitalsSuite = (suite.name||'').toLowerCase().includes('web-vitals');
+  const tests = (suite.tests||[]).map((t,i) => {
+    if (isVitalsSuite && t.vitalsMetric != null && t.vitalsValue != null) {
+      return renderVitalsCard(t, i);
+    }
+    return `
     <div class="test-card" id="tc-${i}" onclick="toggleCard(${i})">
       <div class="tc-header">
         <div class="status-dot dot-${t.status}"></div>
@@ -388,7 +404,8 @@ function renderDetail(suite) {
         ${t.retry   ? `<div class="detail-row"><div class="detail-key">Retry</div><div class="detail-val">${t.retry}×</div></div>` : ''}
         ${t.error   ? `<div class="error-block">${esc(t.error)}</div>` : ''}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   const meta = DATA.meta||{};
   document.getElementById('detail-panel').innerHTML = `
     <div class="panel-header">
@@ -412,6 +429,64 @@ function renderDetail(suite) {
       <span>${esc(meta.project||'timocom-ai-tests')} · <a href="${esc(meta.source||'#')}" target="_blank" style="color:inherit">${esc(meta.source||'')}</a></span>
       <span>Run: ${fmtDate(meta.runAt)} · ${esc(meta.browser||'Playwright')}</span>
     </div>`;
+}
+
+// ---------------------------------------------------------------------------
+// Vitals classification helpers
+// ---------------------------------------------------------------------------
+const VITALS_THRESHOLDS = {
+  TTFB: { good: 800,  needs: 1800 },
+  LCP:  { good: 2500, needs: 4000 },
+  CLS:  { good: 0.1,  needs: 0.25 },
+};
+
+function classifyVital(metric, value) {
+  const t = VITALS_THRESHOLDS[metric];
+  if (!t) return 'good';
+  if (value <= t.good)  return 'good';
+  if (value <= t.needs) return 'needs';
+  return 'poor';
+}
+
+function vitalsBadgeLabel(cls) {
+  if (cls === 'good')  return '✓ Good';
+  if (cls === 'needs') return '△ Needs Improvement';
+  return '✗ Poor';
+}
+
+function vitalsBarColor(cls) {
+  if (cls === 'good')  return 'var(--pass)';
+  if (cls === 'needs') return 'var(--skip)';
+  return 'var(--fail)';
+}
+
+function vitalsBarWidth(metric, value) {
+  const t = VITALS_THRESHOLDS[metric];
+  if (!t) return 50;
+  const max = t.needs * 1.5;
+  return Math.min(100, Math.round((value / max) * 100));
+}
+
+function renderVitalsCard(t, i) {
+  const metric = t.vitalsMetric;
+  const value  = t.vitalsValue;
+  const unit   = t.vitalsUnit || '';
+  const cls    = classifyVital(metric, value);
+  const displayVal = unit === 'score' ? value.toFixed(3) : Math.round(value) + 'ms';
+  const barW   = vitalsBarWidth(metric, value);
+  const barCol = vitalsBarColor(cls);
+  const pageName = t.name.replace(/^(TTFB|LCP|CLS)\s*[—-]\s*/i, '');
+
+  return `<div class="test-card" id="tc-${i}" style="border-left: 3px solid ${barCol}">
+    <div class="vitals-row">
+      <div class="vitals-metric-name">${esc(metric)}</div>
+      <div class="vitals-value" style="color:${barCol}">${displayVal}</div>
+      <div class="vitals-bar-wrap"><div class="vitals-bar" style="width:${barW}%;background:${barCol}"></div></div>
+      <div class="vitals-badge badge-${cls}">${vitalsBadgeLabel(cls)}</div>
+      <div class="tc-time" style="margin-left:4px">${esc(pageName)}</div>
+    </div>
+    ${t.error ? `<div style="padding:0 14px 10px"><div class="error-block">${esc(t.error)}</div></div>` : ''}
+  </div>`;
 }
 
 function selectSuite(id) {
