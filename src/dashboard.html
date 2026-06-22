@@ -154,9 +154,66 @@
   .error-block { background: var(--fail-bg); border: 1px solid #fca5a5; border-radius: 5px; padding: 9px 11px; font-family: var(--mono); font-size: 12px; color: var(--fail); margin-top: 8px; white-space: pre-wrap; }
   .run-footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
 
+  /* ── Tab navigation ── */
+  #tab-bar {
+    background: var(--rail);
+    border-bottom: 1px solid #2d3f55;
+    display: flex;
+    padding: 0 clamp(1rem, 4vw, 2rem);
+    gap: 0;
+  }
+  .tab-btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    letter-spacing: .03em;
+  }
+  .tab-btn:hover { color: #e2e8f0; }
+  .tab-btn.active { color: var(--accent-light); border-bottom-color: var(--accent); }
+
+  /* ── Synthetic tab ── */
+  #synth-panel { padding: 24px 28px; background: var(--warm-white); overflow-y: auto; height: calc(100vh - 170px); display: none; }
+  .synth-global { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 28px; }
+  .sg-card { background: var(--rail); border-radius: 10px; padding: 20px; text-align: center; border: 1px solid #2d3f55; }
+  .sg-val { font-family: var(--mono); font-size: 2rem; font-weight: 700; }
+  .sg-lbl { font-size: 12px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; }
+  .synth-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; }
+  .url-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .url-card.card-ok   { border-left: 4px solid var(--pass); }
+  .url-card.card-fail { border-left: 4px solid var(--fail); }
+  .url-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .url-icon { font-size: 20px; }
+  .url-label { font-size: 15px; font-weight: 600; color: var(--ink); flex: 1; }
+  .url-status-badge { font-family: var(--mono); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+  .badge-ok   { background: var(--pass-bg); color: var(--pass); }
+  .badge-fail { background: var(--fail-bg); color: var(--fail); }
+  .url-path { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .url-metrics { display: flex; gap: 20px; margin-bottom: 8px; }
+  .metric { display: flex; flex-direction: column; }
+  .metric-val { font-family: var(--mono); font-size: 17px; font-weight: 700; color: var(--ink); }
+  .metric-val.slow { color: var(--skip); }
+  .metric-val.fast { color: var(--pass); }
+  .metric-lbl { font-size: 11px; color: var(--muted); }
+  .sparkline { display: flex; align-items: flex-end; gap: 3px; height: 28px; margin-top: 8px; }
+  .spark-bar { flex: 1; border-radius: 2px 2px 0 0; background: var(--blue); opacity: .55; min-height: 3px; }
+  .url-footer { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .kw-badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-family: var(--mono); }
+  .kw-ok   { background: #dcfce7; color: #16a34a; }
+  .kw-fail { background: #fee2e2; color: #dc2626; }
+  .error-note { font-family: var(--mono); font-size: 11px; color: var(--fail); background: var(--fail-bg); padding: 2px 8px; border-radius: 4px; }
+  .synth-msg { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 40vh; gap: 12px; color: var(--muted); text-align: center; }
+
   @media (max-width: 660px) {
     #layout { grid-template-columns: 1fr; height: auto; }
     #sidebar { height: auto; max-height: 40vh; }
+    .synth-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -187,6 +244,12 @@
   </div>
 </div>
 
+<!-- Tab bar -->
+<div id="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('e2e')" id="tab-e2e">⚗️ E2E Tests</button>
+  <button class="tab-btn" onclick="switchTab('synth')" id="tab-synth">🛰️ Synthetic Monitoring</button>
+</div>
+
 <!-- Main layout -->
 <div id="layout">
   <div id="sidebar">
@@ -210,6 +273,24 @@
       <p style="font-size:12px;color:var(--muted)">Pick a test suite from the left to see results.</p>
     </div>
     <div id="detail-panel" style="display:none"></div>
+  </div>
+</div>
+
+<!-- Synthetic Monitoring Panel -->
+<div id="synth-panel">
+  <div class="synth-msg" id="synth-loading">
+    <div class="spinner"></div>
+    <span style="font-family:var(--mono);font-size:13px">Lade Monitoring-Daten…</span>
+  </div>
+  <div class="synth-msg" id="synth-error" style="display:none">
+    <div class="big-icon">⚠️</div>
+    <strong style="color:var(--ink)">Worker nicht erreichbar</strong>
+    <code id="synth-err-msg" style="font-family:var(--mono);font-size:12px;color:var(--fail)"></code>
+    <p style="font-size:13px;color:var(--muted)">Starte den Worker unter <code>timocom-sitemap-monitor.hdpasso29.workers.dev/results</code></p>
+  </div>
+  <div id="synth-content" style="display:none">
+    <div class="synth-global" id="synth-global"></div>
+    <div class="synth-grid" id="synth-grid"></div>
   </div>
 </div>
 
@@ -344,6 +425,99 @@ function selectSuite(id) {
 function toggleCard(i) { document.getElementById(`tc-${i}`)?.classList.toggle('open'); }
 
 load();
+
+// ---------------------------------------------------------------------------
+// Tab switching
+// ---------------------------------------------------------------------------
+function switchTab(tab) {
+  const isE2e = tab === 'e2e';
+  document.getElementById('tab-e2e').classList.toggle('active', isE2e);
+  document.getElementById('tab-synth').classList.toggle('active', !isE2e);
+  document.getElementById('layout').style.display = isE2e ? 'grid' : 'none';
+  document.getElementById('synth-panel').style.display = isE2e ? 'none' : 'block';
+  if (!isE2e && !SYNTH_DATA) loadSynth();
+}
+
+// ---------------------------------------------------------------------------
+// Synthetic Monitoring
+// ---------------------------------------------------------------------------
+const WORKER_URL = 'https://timocom-sitemap-monitor.hdpasso29.workers.dev/results';
+let SYNTH_DATA = null;
+
+async function loadSynth() {
+  try {
+    const res = await fetch(WORKER_URL, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    SYNTH_DATA = await res.json();
+    renderSynth();
+  } catch (e) {
+    document.getElementById('synth-loading').style.display = 'none';
+    document.getElementById('synth-error').style.display = 'flex';
+    document.getElementById('synth-err-msg').textContent = e.message;
+  }
+}
+
+function renderSynth() {
+  document.getElementById('synth-loading').style.display = 'none';
+  document.getElementById('synth-content').style.display = 'block';
+
+  const g = SYNTH_DATA.global || {};
+  const uptimeColor = g.uptime >= 99 ? 'var(--pass)' : g.uptime >= 95 ? 'var(--skip)' : 'var(--fail)';
+  const ttfbColor   = g.avgTtfb < 600 ? 'var(--pass)' : g.avgTtfb < 1200 ? 'var(--skip)' : 'var(--fail)';
+
+  document.getElementById('synth-global').innerHTML = `
+    <div class="sg-card">
+      <div class="sg-val" style="color:${uptimeColor}">${g.uptime ?? '–'}%</div>
+      <div class="sg-lbl">Uptime</div>
+    </div>
+    <div class="sg-card">
+      <div class="sg-val" style="color:${ttfbColor}">${g.avgTtfb ?? '–'}ms</div>
+      <div class="sg-lbl">Avg TTFB</div>
+    </div>
+    <div class="sg-card">
+      <div class="sg-val" style="color:var(--pass)">${g.passed ?? '–'}</div>
+      <div class="sg-lbl">Erreichbar</div>
+    </div>
+    <div class="sg-card">
+      <div class="sg-val" style="color:var(--muted)">${g.total ?? '–'}</div>
+      <div class="sg-lbl">URLs gesamt</div>
+    </div>
+    <div class="sg-card" style="grid-column: span 1">
+      <div class="sg-val" style="color:var(--muted);font-size:1rem">${fmtDate(SYNTH_DATA.meta?.runAt)}</div>
+      <div class="sg-lbl">Letzter Run</div>
+    </div>`;
+
+  const urls = SYNTH_DATA.urls || [];
+  document.getElementById('synth-grid').innerHTML = urls.map(u => {
+    const ttfbClass = u.ttfb < 600 ? 'fast' : u.ttfb > 1500 ? 'slow' : '';
+    const sparkMax  = Math.max(...(u.trend || [1]), 1);
+    const sparkBars = (u.trend || []).map(v => {
+      const h = Math.max(4, Math.round((v / sparkMax) * 28));
+      return `<div class="spark-bar" style="height:${h}px" title="${v}ms"></div>`;
+    }).join('');
+
+    return `<div class="url-card ${u.ok ? 'card-ok' : 'card-fail'}">
+      <div class="url-card-top">
+        <span class="url-icon">${esc(u.icon || '🌐')}</span>
+        <span class="url-label">${esc(u.label)}</span>
+        <span class="url-status-badge ${u.ok ? 'badge-ok' : 'badge-fail'}">${u.ok ? '✓ ' + u.status : '✗ ' + (u.status || 'ERR')}</span>
+      </div>
+      <div class="url-path">${esc(new URL(u.url).pathname || '/')}</div>
+      <div class="url-metrics">
+        <div class="metric">
+          <span class="metric-val ${ttfbClass}">${u.ttfb}ms</span>
+          <span class="metric-lbl">TTFB</span>
+        </div>
+        ${u.redirected ? `<div class="metric"><span class="metric-val" style="color:var(--blue)">↪</span><span class="metric-lbl">Redirect</span></div>` : ''}
+      </div>
+      ${u.trend?.length > 1 ? `<div class="sparkline">${sparkBars}</div>` : ''}
+      <div class="url-footer">
+        ${u.keywordFound !== undefined ? `<span class="kw-badge ${u.keywordFound ? 'kw-ok' : 'kw-fail'}">${u.keywordFound ? '✓ keyword' : '✗ keyword missing'}</span>` : ''}
+        ${u.error ? `<span class="error-note">${esc(u.error)}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
 </script>
 </body>
 </html>
