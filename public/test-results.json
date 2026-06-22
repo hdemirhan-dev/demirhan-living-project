@@ -1,7 +1,7 @@
 {
   "meta": {
-    "runAt": "2026-06-22T09:11:10.192Z",
-    "finishedAt": "2026-06-22T09:14:41.748Z",
+    "runAt": "2026-06-22T09:28:27.220Z",
+    "finishedAt": "2026-06-22T09:31:33.934Z",
     "browser": "Chromium (Playwright)",
     "project": "timocom-ai-tests",
     "source": "https://gitlab.com/hdquality/timocom-ai-tests/-/pipelines"
@@ -16,32 +16,41 @@
         {
           "name": "TC-001: Gültige Registrierung — Registrierungsseite erreichbar und Formular vorhanden",
           "status": "pass",
-          "ms": 7441,
+          "ms": 8646,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-002: Validierung ungültiger Email — Formular wird nicht abgesendet",
           "status": "pass",
-          "ms": 8202,
+          "ms": 8891,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-003: Leere Pflichtfelder — Formular bleibt auf Registrierungsseite",
           "status": "pass",
-          "ms": 7720,
+          "ms": 8491,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         }
       ],
-      "duration": "23.4s"
+      "duration": "26.0s"
     },
     {
       "id": "chromium--miscresponsive-design-browser-kompatibilitaetspecjs--responsive-design--browser-kompatibilitt",
@@ -52,32 +61,41 @@
         {
           "name": "TC-001: Mobile (375px) Navigation — Hamburger-Menü sichtbar, alle Links erreichbar",
           "status": "pass",
-          "ms": 5899,
+          "ms": 6162,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-002: Tablet (768px) Layout — Formularfelder sichtbar und ausreichend breit",
           "status": "pass",
-          "ms": 5542,
+          "ms": 6842,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-003: Desktop (1920px) Layout — Navigation und Formular vollständig sichtbar",
           "status": "pass",
-          "ms": 4181,
+          "ms": 6399,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         }
       ],
-      "duration": "15.6s"
+      "duration": "19.4s"
     },
     {
       "id": "chromium--miscsprachenwechselspecjs--sprachenwechsel",
@@ -88,32 +106,41 @@
         {
           "name": "TC-001: Wechsel zu English",
           "status": "pass",
-          "ms": 7222,
+          "ms": 8684,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-002: Wechsel zu Español",
           "status": "pass",
-          "ms": 7614,
+          "ms": 9136,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-003: Persistenz nach Neuladen",
           "status": "pass",
-          "ms": 9760,
+          "ms": 11074,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         }
       ],
-      "duration": "24.6s"
+      "duration": "28.9s"
     },
     {
       "id": "chromium--miscsuchfeld-validierung-autocompletionspecjs--suchfeld-validierung--autocompletion",
@@ -124,32 +151,41 @@
         {
           "name": "TC-001: Gültige Ortseingabe — Suche liefert Ergebnisse",
           "status": "pass",
-          "ms": 7006,
+          "ms": 7915,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-002: Spezialzeichen — Seite reagiert stabil ohne Absturz",
           "status": "pass",
-          "ms": 6244,
+          "ms": 7865,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-003: Leeres Suchfeld — Seite bleibt stabil",
           "status": "pass",
-          "ms": 5603,
+          "ms": 7302,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         }
       ],
-      "duration": "18.9s"
+      "duration": "23.1s"
     },
     {
       "id": "chromium--navigationservices-uebersicht-erkundenspecjs--services-bersicht-erkunden",
@@ -160,32 +196,41 @@
         {
           "name": "TC-001: Navigation zur Services-Seite",
           "status": "pass",
-          "ms": 6085,
+          "ms": 6940,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-002: Frachtenbörse-Seite erreichbar",
           "status": "pass",
-          "ms": 6213,
+          "ms": 6749,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-003: Geschlossene Frachtenbörse erreichbar",
           "status": "pass",
-          "ms": 5821,
+          "ms": 7033,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         }
       ],
-      "duration": "18.1s"
+      "duration": "20.7s"
     },
     {
       "id": "chromium--searchfrachtenboerse-durchsuchenspecjs--frachtenbrse-durchsuchen",
@@ -196,32 +241,41 @@
         {
           "name": "TC-001: Suche mit Aufbauart-Filter",
           "status": "pass",
-          "ms": 6173,
+          "ms": 7102,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-002: Von-Nach Route suchen",
           "status": "pass",
-          "ms": 6161,
+          "ms": 7332,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         },
         {
           "name": "TC-003: Standardsuche liefert Ergebnisse oder Einblick-Seite",
           "status": "pass",
-          "ms": 5407,
+          "ms": 7276,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
         }
       ],
-      "duration": "17.7s"
+      "duration": "21.7s"
     },
     {
       "id": "chromium--vitalsweb-vitalsspecjs--performance--web-vitals",
@@ -230,124 +284,151 @@
       "url": "",
       "tests": [
         {
-          "name": "TTFB — Homepage unter 800ms",
+          "name": "TTFB — Homepage",
           "status": "pass",
-          "ms": 6955,
+          "ms": 1687,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "TTFB",
+          "vitalsValue": 1025,
+          "vitalsUnit": "ms"
         },
         {
-          "name": "LCP — Homepage unter 4000ms",
+          "name": "LCP — Homepage",
           "status": "pass",
-          "ms": 7210,
+          "ms": 4715,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "LCP",
+          "vitalsValue": 928,
+          "vitalsUnit": "ms"
         },
         {
-          "name": "CLS — Homepage unter 0.25",
+          "name": "CLS — Homepage",
           "status": "pass",
-          "ms": 7190,
+          "ms": 5356,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "CLS",
+          "vitalsValue": 0,
+          "vitalsUnit": "score"
         },
         {
-          "name": "TTFB — Frachtenbörse unter 800ms",
+          "name": "TTFB — Frachtenbörse",
           "status": "pass",
-          "ms": 7081,
+          "ms": 1210,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "TTFB",
+          "vitalsValue": 805,
+          "vitalsUnit": "ms"
         },
         {
-          "name": "LCP — Frachtenbörse unter 4000ms",
+          "name": "LCP — Frachtenbörse",
           "status": "pass",
-          "ms": 6976,
+          "ms": 4923,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "LCP",
+          "vitalsValue": 1068,
+          "vitalsUnit": "ms"
         },
         {
-          "name": "CLS — Frachtenbörse unter 0.25",
+          "name": "CLS — Frachtenbörse",
           "status": "pass",
-          "ms": 6895,
+          "ms": 5003,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "CLS",
+          "vitalsValue": 0,
+          "vitalsUnit": "score"
         },
         {
-          "name": "TTFB — Registrierung unter 800ms",
-          "status": "fail",
-          "ms": 7286,
-          "locator": "Worker Cleanup",
-          "step": "Worker Cleanup",
-          "error": "Error: TTFB für Registrierung sollte < 800ms sein\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m800\u001b[39m\nReceived:   \u001b[31m848\u001b[39m\nError: TTFB für Registrierung sollte < 800ms sein\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m800\u001b[39m",
-          "retry": null
-        },
-        {
-          "name": "TTFB — Registrierung unter 800ms",
+          "name": "TTFB — Registrierung",
           "status": "pass",
-          "ms": 7246,
+          "ms": 1032,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": 1
+          "retry": null,
+          "vitalsMetric": "TTFB",
+          "vitalsValue": 685,
+          "vitalsUnit": "ms"
         },
         {
-          "name": "LCP — Registrierung unter 4000ms",
+          "name": "LCP — Registrierung",
           "status": "pass",
-          "ms": 7024,
+          "ms": 5518,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "LCP",
+          "vitalsValue": 704,
+          "vitalsUnit": "ms"
         },
         {
-          "name": "CLS — Registrierung unter 0.25",
+          "name": "CLS — Registrierung",
           "status": "pass",
-          "ms": 7036,
+          "ms": 5515,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "CLS",
+          "vitalsValue": 0,
+          "vitalsUnit": "score"
         },
         {
-          "name": "TTFB — Services unter 800ms",
+          "name": "TTFB — Services",
           "status": "pass",
-          "ms": 6989,
+          "ms": 1227,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "TTFB",
+          "vitalsValue": 829,
+          "vitalsUnit": "ms"
         },
         {
-          "name": "LCP — Services unter 4000ms",
+          "name": "LCP — Services",
           "status": "pass",
-          "ms": 7104,
+          "ms": 4781,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "LCP",
+          "vitalsValue": 1068,
+          "vitalsUnit": "ms"
         },
         {
-          "name": "CLS — Services unter 0.25",
+          "name": "CLS — Services",
           "status": "pass",
-          "ms": 6987,
+          "ms": 4655,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
-          "retry": null
+          "retry": null,
+          "vitalsMetric": "CLS",
+          "vitalsValue": 0,
+          "vitalsUnit": "score"
         }
       ],
-      "duration": "92.0s"
+      "duration": "45.6s"
     }
   ]
 }
