@@ -1,7 +1,7 @@
 {
   "meta": {
-    "runAt": "2026-06-22T19:31:51.247Z",
-    "finishedAt": "2026-06-22T19:33:43.241Z",
+    "runAt": "2026-06-22T19:41:08.227Z",
+    "finishedAt": "2026-06-22T19:42:57.082Z",
     "browser": "Chromium (Playwright)",
     "project": "timocom-ai-tests",
     "source": "https://gitlab.com/hdquality/timocom-ai-tests/-/pipelines"
@@ -16,7 +16,7 @@
         {
           "name": "TC-001: Gültige Registrierung — Registrierungsseite erreichbar und Formular vorhanden",
           "status": "pass",
-          "ms": 3274,
+          "ms": 3620,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -28,7 +28,7 @@
         {
           "name": "TC-002: Validierung ungültiger Email — Formular wird nicht abgesendet",
           "status": "pass",
-          "ms": 4017,
+          "ms": 5105,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -40,7 +40,7 @@
         {
           "name": "TC-003: Leere Pflichtfelder — Formular bleibt auf Registrierungsseite",
           "status": "pass",
-          "ms": 4545,
+          "ms": 3514,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -50,7 +50,7 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "11.8s"
+      "duration": "12.2s"
     },
     {
       "id": "chromium--miscresponsive-design-browser-kompatibilitaetspecjs--responsive-design--browser-kompatibilitt",
@@ -59,9 +59,9 @@
       "url": "",
       "tests": [
         {
-          "name": "TC-001: Mobile (375px) Navigation — Hamburger-Menü sichtbar, alle Links erreichbar",
+          "name": "TC-002: Tablet (768px) Layout — Formularfelder sichtbar und ausreichend breit",
           "status": "pass",
-          "ms": 8285,
+          "ms": 6660,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -71,9 +71,9 @@
           "vitalsUnit": null
         },
         {
-          "name": "TC-002: Tablet (768px) Layout — Formularfelder sichtbar und ausreichend breit",
+          "name": "TC-001: Mobile (375px) Navigation — Hamburger-Menü sichtbar, alle Links erreichbar",
           "status": "pass",
-          "ms": 7323,
+          "ms": 12460,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -85,7 +85,7 @@
         {
           "name": "TC-003: Desktop (1920px) Layout — Navigation und Formular vollständig sichtbar",
           "status": "pass",
-          "ms": 7432,
+          "ms": 8244,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -95,7 +95,7 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "23.0s"
+      "duration": "27.4s"
     },
     {
       "id": "chromium--miscsprachenwechselspecjs--sprachenwechsel",
@@ -106,7 +106,7 @@
         {
           "name": "TC-001: Wechsel zu English",
           "status": "pass",
-          "ms": 12546,
+          "ms": 12847,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -118,7 +118,7 @@
         {
           "name": "TC-002: Wechsel zu Español",
           "status": "pass",
-          "ms": 13239,
+          "ms": 12370,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -130,7 +130,7 @@
         {
           "name": "TC-003: Persistenz nach Neuladen",
           "status": "pass",
-          "ms": 11819,
+          "ms": 15269,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -140,7 +140,7 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "37.6s"
+      "duration": "40.5s"
     },
     {
       "id": "chromium--miscsuchfeld-validierung-autocompletionspecjs--suchfeld-validierung--autocompletion",
@@ -151,7 +151,7 @@
         {
           "name": "TC-001: Gültige Ortseingabe — Suche liefert Ergebnisse",
           "status": "pass",
-          "ms": 10882,
+          "ms": 10714,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -163,7 +163,7 @@
         {
           "name": "TC-002: Spezialzeichen — Seite reagiert stabil ohne Absturz",
           "status": "pass",
-          "ms": 10605,
+          "ms": 7784,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -175,7 +175,7 @@
         {
           "name": "TC-003: Leeres Suchfeld — Seite bleibt stabil",
           "status": "pass",
-          "ms": 12280,
+          "ms": 7804,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -185,7 +185,7 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "33.8s"
+      "duration": "26.3s"
     },
     {
       "id": "chromium--navigationservices-uebersicht-erkundenspecjs--services-bersicht-erkunden",
@@ -196,7 +196,7 @@
         {
           "name": "TC-001: Navigation zur Services-Seite",
           "status": "pass",
-          "ms": 6925,
+          "ms": 9257,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -208,7 +208,7 @@
         {
           "name": "TC-002: Frachtenbörse-Seite erreichbar",
           "status": "pass",
-          "ms": 8574,
+          "ms": 10808,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -220,7 +220,7 @@
         {
           "name": "TC-003: Geschlossene Frachtenbörse erreichbar",
           "status": "pass",
-          "ms": 12368,
+          "ms": 9385,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -230,7 +230,7 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "27.9s"
+      "duration": "29.4s"
     },
     {
       "id": "chromium--searchfrachtenboerse-durchsuchenspecjs--frachtenbrse-durchsuchen",
@@ -241,7 +241,7 @@
         {
           "name": "TC-001: Suche mit Aufbauart-Filter",
           "status": "pass",
-          "ms": 12931,
+          "ms": 6084,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -253,7 +253,7 @@
         {
           "name": "TC-002: Von-Nach Route suchen",
           "status": "pass",
-          "ms": 10636,
+          "ms": 10462,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -265,7 +265,7 @@
         {
           "name": "TC-003: Standardsuche liefert Ergebnisse oder Einblick-Seite",
           "status": "pass",
-          "ms": 9857,
+          "ms": 10948,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -275,7 +275,7 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "33.4s"
+      "duration": "27.5s"
     },
     {
       "id": "chromium--vitalsweb-vitalsspecjs--performance--web-vitals",
@@ -286,103 +286,103 @@
         {
           "name": "TTFB — Homepage",
           "status": "pass",
-          "ms": 3053,
+          "ms": 2115,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "TTFB",
-          "vitalsValue": 1649,
+          "vitalsValue": 978,
           "vitalsUnit": "ms"
         },
         {
           "name": "LCP — Homepage",
           "status": "pass",
-          "ms": 6139,
+          "ms": 4610,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "LCP",
-          "vitalsValue": 1744,
-          "vitalsUnit": "ms"
-        },
-        {
-          "name": "TTFB — Frachtenbörse",
-          "status": "pass",
-          "ms": 1348,
-          "locator": "After Hooks",
-          "step": "After Hooks",
-          "error": null,
-          "retry": null,
-          "vitalsMetric": "TTFB",
-          "vitalsValue": 984,
+          "vitalsValue": 1876,
           "vitalsUnit": "ms"
         },
         {
           "name": "CLS — Homepage",
           "status": "pass",
-          "ms": 5307,
+          "ms": 5039,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "CLS",
-          "vitalsValue": 0,
+          "vitalsValue": 0.001,
           "vitalsUnit": "score"
         },
         {
-          "name": "LCP — Frachtenbörse",
+          "name": "TTFB — Frachtenbörse",
           "status": "pass",
-          "ms": 5289,
-          "locator": "After Hooks",
-          "step": "After Hooks",
-          "error": null,
-          "retry": null,
-          "vitalsMetric": "LCP",
-          "vitalsValue": 1200,
-          "vitalsUnit": "ms"
-        },
-        {
-          "name": "TTFB — Registrierung",
-          "status": "pass",
-          "ms": 1316,
+          "ms": 1355,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "TTFB",
-          "vitalsValue": 833,
+          "vitalsValue": 835,
           "vitalsUnit": "ms"
         },
         {
-          "name": "CLS — Frachtenbörse",
+          "name": "LCP — Frachtenbörse",
           "status": "pass",
-          "ms": 5190,
-          "locator": "After Hooks",
-          "step": "After Hooks",
-          "error": null,
-          "retry": null,
-          "vitalsMetric": "CLS",
-          "vitalsValue": 0,
-          "vitalsUnit": "score"
-        },
-        {
-          "name": "LCP — Registrierung",
-          "status": "pass",
-          "ms": 6036,
+          "ms": 5997,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "LCP",
-          "vitalsValue": 976,
+          "vitalsValue": 1216,
+          "vitalsUnit": "ms"
+        },
+        {
+          "name": "CLS — Frachtenbörse",
+          "status": "pass",
+          "ms": 5755,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": "CLS",
+          "vitalsValue": 0.001,
+          "vitalsUnit": "score"
+        },
+        {
+          "name": "TTFB — Registrierung",
+          "status": "pass",
+          "ms": 1610,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": "TTFB",
+          "vitalsValue": 1001,
+          "vitalsUnit": "ms"
+        },
+        {
+          "name": "LCP — Registrierung",
+          "status": "pass",
+          "ms": 6404,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": "LCP",
+          "vitalsValue": 984,
           "vitalsUnit": "ms"
         },
         {
           "name": "CLS — Registrierung",
           "status": "pass",
-          "ms": 5977,
+          "ms": 5942,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -394,41 +394,41 @@
         {
           "name": "TTFB — Services",
           "status": "pass",
-          "ms": 1897,
+          "ms": 1279,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "TTFB",
-          "vitalsValue": 886,
+          "vitalsValue": 803,
           "vitalsUnit": "ms"
         },
         {
           "name": "LCP — Services",
           "status": "pass",
-          "ms": 5020,
+          "ms": 5538,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "LCP",
-          "vitalsValue": 1268,
+          "vitalsValue": 1740,
           "vitalsUnit": "ms"
         },
         {
           "name": "CLS — Services",
           "status": "pass",
-          "ms": 5206,
+          "ms": 5244,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "CLS",
-          "vitalsValue": 0,
+          "vitalsValue": 0.001,
           "vitalsUnit": "score"
         }
       ],
-      "duration": "51.8s"
+      "duration": "50.9s"
     }
   ]
 }
