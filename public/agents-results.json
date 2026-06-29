@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "runAt": "2026-06-29T21:11:33.071Z",
+    "duration": "1.5s",
+    "totalTests": 1,
+    "passed": 1,
+    "failed": 0,
+    "fixme": 0,
+    "source": "https://github.com/hdemirhan-dev/timocom-playwright-agents",
+    "browser": "Chromium"
+  },
+  "pipeline": [
+    {
+      "name": "Planner",
+      "icon": "🗺️",
+      "model": "claude-haiku-4-5",
+      "ran": true,
+      "duration": "~6m"
+    },
+    {
+      "name": "Generator",
+      "icon": "⚙️",
+      "model": "claude-sonnet-4-6",
+      "ran": true,
+      "duration": "~6m"
+    },
+    {
+      "name": "Healer",
+      "icon": "🩹",
+      "model": "claude-sonnet-4-6",
+      "ran": true,
+      "duration": "~3m"
+    }
+  ],
+  "suites": [
+    {
+      "name": "homepage.spec.ts",
+      "icon": "🏠",
+      "file": "homepage.spec.ts",
+      "duration": "–",
+      "tests": []
+    },
+    {
+      "name": "registration.spec.ts",
+      "icon": "📝",
+      "file": "registration.spec.ts",
+      "duration": "–",
+      "tests": []
+    },
+    {
+      "name": "seed.spec.ts",
+      "icon": "📄",
+      "file": "seed.spec.ts",
+      "duration": "1.5s",
+      "tests": [
+        {
+          "name": "seed",
+          "status": "pass",
+          "ms": 1495,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "services.spec.ts",
+      "icon": "🛠️",
+      "file": "services.spec.ts",
+      "duration": "–",
+      "tests": []
+    }
+  ]
+}
