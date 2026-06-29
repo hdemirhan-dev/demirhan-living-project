@@ -28,51 +28,31 @@
     --fail-bg:     #FEE2E2;
     --skip:        #D97706;
     --skip-bg:     #FEF3C7;
+    --fixme:       #7C3AED;
+    --fixme-bg:    #EDE9FE;
     --mono:        'JetBrains Mono', monospace;
     --sans:        'DM Sans', sans-serif;
   }
   html, body { height: 100%; background: var(--warm-white); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; }
 
-  /* ── Site header (matches demirhan.living style) ── */
   .site-header {
     background: var(--ink);
     padding: 14px clamp(1.25rem, 5vw, 3rem);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
     position: sticky; top: 0; z-index: 200;
   }
-  .site-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
-    color: var(--cream);
-    text-decoration: none;
-    letter-spacing: .06em;
-  }
+  .site-logo { font-family: 'Playfair Display', serif; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--cream); text-decoration: none; letter-spacing: .06em; }
   .site-logo span { color: var(--accent-light); }
-  .header-tag {
-    font-size: .8rem;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--accent-light);
-    opacity: .7;
-  }
+  .header-tag { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-light); opacity: .7; }
 
-  /* ── Health stripe ── */
   #health-stripe { height: 4px; display: flex; }
   .stripe-pass { background: var(--pass); height: 100%; transition: width .6s; }
   .stripe-fail { background: var(--fail); height: 100%; transition: width .6s; }
   .stripe-skip { background: var(--skip); height: 100%; transition: width .6s; }
 
-  /* ── Dashboard topbar ── */
   #dash-bar {
-    background: var(--rail);
-    padding: 0 clamp(1rem, 4vw, 2rem);
-    height: 56px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    border-bottom: 1px solid #2d3f55;
+    background: var(--rail); padding: 0 clamp(1rem, 4vw, 2rem);
+    height: 56px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #2d3f55;
   }
   .db-brand { font-family: var(--mono); font-size: 14px; font-weight: 700; color: #e2e8f0; }
   .db-brand span { color: var(--blue); }
@@ -88,10 +68,20 @@
   .ci-link { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; }
   .ci-link:hover { color: #fff; }
 
-  /* ── Layout ── */
-  #layout { display: grid; grid-template-columns: 260px 1fr; height: calc(100vh - 118px); }
+  #tab-bar {
+    background: var(--rail); border-bottom: 1px solid #2d3f55;
+    display: flex; padding: 0 clamp(1rem, 4vw, 2rem); gap: 0;
+  }
+  .tab-btn {
+    font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--muted);
+    background: none; border: none; border-bottom: 3px solid transparent;
+    padding: 12px 20px; cursor: pointer; transition: color .15s, border-color .15s; letter-spacing: .03em;
+  }
+  .tab-btn:hover { color: #e2e8f0; }
+  .tab-btn.active { color: var(--accent-light); border-bottom-color: var(--accent); }
 
-  /* ── Sidebar ── */
+  /* ── E2E Layout ── */
+  #layout { display: grid; grid-template-columns: 260px 1fr; height: calc(100vh - 170px); }
   #sidebar { background: var(--rail); overflow-y: auto; padding: 14px 0; border-right: 1px solid #2d3f55; }
   .sidebar-label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 0 18px 10px; }
   .suite-item { display: flex; align-items: center; gap: 10px; padding: 11px 18px; cursor: pointer; border-left: 3px solid transparent; transition: background .1s; }
@@ -106,19 +96,16 @@
   .badge-fail { background: #450a0a; color: #f87171; }
   .badge-mixed { background: #451a03; color: #fbbf24; }
 
-  /* ── Main panel ── */
   #main { overflow-y: auto; padding: 24px 28px; background: var(--warm-white); }
   #loading-state, #error-state, #empty-state {
     display: flex; flex-direction: column; align-items: center;
-    justify-content: center; height: 50vh; color: var(--muted);
-    text-align: center; gap: 10px;
+    justify-content: center; height: 50vh; color: var(--muted); text-align: center; gap: 10px;
   }
   .big-icon { font-size: 38px; }
   .spinner { width: 26px; height: 26px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   #error-state code { font-family: var(--mono); font-size: 11px; background: var(--fail-bg); color: var(--fail); padding: 8px 14px; border-radius: 6px; max-width: 400px; word-break: break-all; }
 
-  /* ── Panel detail ── */
   .panel-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
   .panel-icon { font-size: 30px; line-height: 1; }
   .panel-title { font-size: 20px; font-weight: 600; color: var(--ink); }
@@ -131,7 +118,6 @@
   .prog-fail { background: var(--fail); }
   .prog-skip { background: var(--skip); }
 
-  /* ── Test cards ── */
   .test-list { display: flex; flex-direction: column; gap: 7px; }
   .test-card { border: 1px solid var(--border); border-radius: 7px; overflow: hidden; cursor: pointer; transition: box-shadow .15s; background: #fff; }
   .test-card:hover { box-shadow: 0 2px 8px rgba(26,22,18,.08); }
@@ -154,29 +140,16 @@
   .error-block { background: var(--fail-bg); border: 1px solid #fca5a5; border-radius: 5px; padding: 9px 11px; font-family: var(--mono); font-size: 12px; color: var(--fail); margin-top: 8px; white-space: pre-wrap; }
   .run-footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
 
-  /* ── Tab navigation ── */
-  #tab-bar {
-    background: var(--rail);
-    border-bottom: 1px solid #2d3f55;
-    display: flex;
-    padding: 0 clamp(1rem, 4vw, 2rem);
-    gap: 0;
-  }
-  .tab-btn {
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--muted);
-    background: none;
-    border: none;
-    border-bottom: 3px solid transparent;
-    padding: 12px 20px;
-    cursor: pointer;
-    transition: color .15s, border-color .15s;
-    letter-spacing: .03em;
-  }
-  .tab-btn:hover { color: #e2e8f0; }
-  .tab-btn.active { color: var(--accent-light); border-bottom-color: var(--accent); }
+  /* ── Vitals ── */
+  .vitals-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
+  .vitals-metric-name { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); width: 40px; flex-shrink: 0; }
+  .vitals-value { font-family: var(--mono); font-size: 15px; font-weight: 700; flex: 1; }
+  .vitals-badge { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 100px; flex-shrink: 0; }
+  .badge-good  { background: #dcfce7; color: #16a34a; }
+  .badge-needs { background: #fef3c7; color: #d97706; }
+  .badge-poor  { background: #fee2e2; color: #dc2626; }
+  .vitals-bar-wrap { width: 80px; height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; flex-shrink: 0; }
+  .vitals-bar { height: 100%; border-radius: 100px; transition: width .4s; }
 
   /* ── Synthetic tab ── */
   #synth-panel { padding: 24px 28px; background: var(--warm-white); overflow-y: auto; height: calc(100vh - 170px); display: none; }
@@ -193,7 +166,6 @@
   .url-label { font-size: 15px; font-weight: 600; color: var(--ink); flex: 1; }
   .url-status-badge { font-family: var(--mono); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
   .badge-ok   { background: var(--pass-bg); color: var(--pass); }
-  .badge-fail { background: var(--fail-bg); color: var(--fail); }
   .url-path { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .url-metrics { display: flex; gap: 20px; margin-bottom: 8px; }
   .metric { display: flex; flex-direction: column; }
@@ -208,106 +180,160 @@
   .kw-ok   { background: #dcfce7; color: #16a34a; }
   .kw-fail { background: #fee2e2; color: #dc2626; }
   .error-note { font-family: var(--mono); font-size: 11px; color: var(--fail); background: var(--fail-bg); padding: 2px 8px; border-radius: 4px; }
-
-  /* ── Web Vitals badges ── */
-  .vitals-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
-  .vitals-metric-name { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--muted); width: 40px; flex-shrink: 0; }
-  .vitals-value { font-family: var(--mono); font-size: 15px; font-weight: 700; flex: 1; }
-  .vitals-badge { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 100px; flex-shrink: 0; }
-  .badge-good  { background: #dcfce7; color: #16a34a; }
-  .badge-needs { background: #fef3c7; color: #d97706; }
-  .badge-poor  { background: #fee2e2; color: #dc2626; }
-  .vitals-bar-wrap { width: 80px; height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; flex-shrink: 0; }
-  .vitals-bar { height: 100%; border-radius: 100px; transition: width .4s; }
   .synth-msg { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 40vh; gap: 12px; color: var(--muted); text-align: center; }
+
+  /* ── Agents tab ── */
+  #agents-panel { padding: 24px 28px; background: var(--warm-white); overflow-y: auto; height: calc(100vh - 170px); display: none; }
+
+  .agents-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .agents-title { font-size: 20px; font-weight: 600; color: var(--ink); }
+  .agents-meta { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .agents-repo-link { font-family: var(--mono); font-size: 12px; color: var(--blue); text-decoration: none; margin-left: auto; padding: 5px 12px; border: 1px solid var(--blue); border-radius: 6px; transition: background .15s; }
+  .agents-repo-link:hover { background: var(--blue); color: #fff; }
+
+  .agents-scorecard { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .asc-card { background: var(--rail); border-radius: 10px; padding: 18px; text-align: center; border: 1px solid #2d3f55; }
+  .asc-val { font-family: var(--mono); font-size: 2rem; font-weight: 700; }
+  .asc-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; }
+
+  .agents-pipeline { display: flex; align-items: center; gap: 0; margin-bottom: 28px; background: var(--rail); border-radius: 10px; border: 1px solid #2d3f55; overflow: hidden; }
+  .pipeline-step { flex: 1; padding: 14px 18px; text-align: center; position: relative; }
+  .pipeline-step + .pipeline-step::before { content: '→'; position: absolute; left: -10px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 16px; }
+  .ps-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+  .ps-name { font-family: var(--mono); font-size: 12px; font-weight: 700; color: #e2e8f0; }
+  .ps-model { font-size: 11px; color: var(--muted); }
+  .ps-status { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-top: 6px; display: inline-block; }
+  .ps-done  { background: #134e26; color: #4ade80; }
+  .ps-idle  { background: #1e293b; color: var(--muted); border: 1px solid #2d3f55; }
+
+  .agents-suites { display: flex; flex-direction: column; gap: 16px; }
+  .agent-suite { background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .as-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: #faf8f4; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .as-header:hover { background: #f0ece4; }
+  .as-icon { font-size: 20px; }
+  .as-name { font-size: 15px; font-weight: 600; color: var(--ink); flex: 1; }
+  .as-counts { display: flex; gap: 8px; }
+  .as-badge { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 100px; }
+  .as-pass { background: var(--pass-bg); color: var(--pass); }
+  .as-fail { background: var(--fail-bg); color: var(--fail); }
+  .as-fixme { background: var(--fixme-bg); color: var(--fixme); }
+  .as-duration { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .as-tests { display: none; }
+  .agent-suite.open .as-tests { display: block; }
+
+  .at-row { display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-top: 1px solid var(--border); }
+  .at-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .at-dot-pass  { background: var(--pass); }
+  .at-dot-fail  { background: var(--fail); box-shadow: 0 0 0 3px #fee2e2; }
+  .at-dot-fixme { background: var(--fixme); }
+  .at-name { font-family: var(--mono); font-size: 13px; color: var(--ink); flex: 1; }
+  .at-ms { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .at-tag { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+  .at-tag-pass  { background: var(--pass-bg); color: var(--pass); }
+  .at-tag-fail  { background: var(--fail-bg); color: var(--fail); }
+  .at-tag-fixme { background: var(--fixme-bg); color: var(--fixme); }
+  .at-error { font-family: var(--mono); font-size: 11px; color: var(--fail); background: var(--fail-bg); padding: 8px 18px; border-top: 1px solid #fca5a5; white-space: pre-wrap; }
+
+  .agents-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 40vh; gap: 14px; color: var(--muted); text-align: center; }
+  .agents-empty code { font-family: var(--mono); font-size: 12px; background: var(--rail); color: #e2e8f0; padding: 10px 16px; border-radius: 6px; }
 
   @media (max-width: 660px) {
     #layout { grid-template-columns: 1fr; height: auto; }
     #sidebar { height: auto; max-height: 40vh; }
     .synth-grid { grid-template-columns: 1fr; }
+    .agents-pipeline { flex-direction: column; }
+    .pipeline-step + .pipeline-step::before { content: '↓'; left: 50%; top: -10px; transform: translateX(-50%); }
   }
 </style>
 </head>
 <body>
 
-<!-- Site header — matches demirhan.living branding -->
 <header class="site-header">
   <a href="https://demirhan.living" class="site-logo">Demirhan<span>.</span>Living</a>
   <span class="header-tag">QA Portfolio · timocom.de</span>
 </header>
 
-<!-- Health stripe -->
 <div id="health-stripe">
   <div class="stripe-pass" id="s-pass" style="width:0"></div>
   <div class="stripe-fail" id="s-fail" style="width:0"></div>
   <div class="stripe-skip" id="s-skip" style="width:0"></div>
 </div>
 
-<!-- Dashboard bar -->
 <div id="dash-bar">
   <div class="db-brand"><span>⬡</span> timocom.de · <span>synthetic tests</span></div>
   <div id="scorecard"></div>
   <div class="db-right">
     <div class="live-dot" id="live-dot"></div>
     <span class="db-meta" id="run-time">Loading…</span>
-    <a href="https://gitlab.com/hdquality/timocom-ai-tests"
-       target="_blank" class="ci-link">↗ GitLab Repo</a>
+    <a href="https://gitlab.com/hdquality/timocom-ai-tests" target="_blank" class="ci-link">↗ GitLab Repo</a>
   </div>
 </div>
 
-<!-- Tab bar -->
 <div id="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('e2e')" id="tab-e2e">⚗️ E2E Tests</button>
-  <button class="tab-btn" onclick="switchTab('synth')" id="tab-synth">🛰️ Synthetic Monitoring</button>
+  <button class="tab-btn active" onclick="switchTab('e2e')"    id="tab-e2e">⚗️ E2E Tests</button>
+  <button class="tab-btn"        onclick="switchTab('synth')"  id="tab-synth">🛰️ Synthetic</button>
+  <button class="tab-btn"        onclick="switchTab('agents')" id="tab-agents">🤖 Agents</button>
 </div>
 
-<!-- Main layout -->
+<!-- E2E layout -->
 <div id="layout">
   <div id="sidebar">
     <div class="sidebar-label">Test Suites</div>
     <div id="suite-list"></div>
   </div>
   <div id="main">
-    <div id="loading-state">
-      <div class="spinner"></div>
-      <span style="font-family:var(--mono);font-size:13px;color:var(--muted)">Fetching test-results.json…</span>
-    </div>
-    <div id="error-state" style="display:none">
-      <div class="big-icon">⚠️</div>
-      <strong style="color:var(--ink)">Could not load test results</strong>
-      <code id="err-msg"></code>
-      <p style="font-size:12px">Make sure <code style="background:none;padding:0">test-results.json</code> is in the site root.</p>
-    </div>
-    <div id="empty-state" style="display:none">
-      <div class="big-icon">🧪</div>
-      <strong style="color:var(--ink)">Select a suite</strong>
-      <p style="font-size:12px;color:var(--muted)">Pick a test suite from the left to see results.</p>
-    </div>
+    <div id="loading-state"><div class="spinner"></div><span style="font-family:var(--mono);font-size:13px;color:var(--muted)">Fetching test-results.json…</span></div>
+    <div id="error-state" style="display:none"><div class="big-icon">⚠️</div><strong style="color:var(--ink)">Could not load test results</strong><code id="err-msg"></code><p style="font-size:12px">Make sure <code style="background:none;padding:0">test-results.json</code> is in the site root.</p></div>
+    <div id="empty-state" style="display:none"><div class="big-icon">🧪</div><strong style="color:var(--ink)">Select a suite</strong><p style="font-size:12px;color:var(--muted)">Pick a test suite from the left to see results.</p></div>
     <div id="detail-panel" style="display:none"></div>
   </div>
 </div>
 
-<!-- Synthetic Monitoring Panel -->
+<!-- Synthetic panel -->
 <div id="synth-panel">
-  <div class="synth-msg" id="synth-loading">
-    <div class="spinner"></div>
-    <span style="font-family:var(--mono);font-size:13px">Lade Monitoring-Daten…</span>
+  <div class="synth-msg" id="synth-loading"><div class="spinner"></div><span style="font-family:var(--mono);font-size:13px">Lade Monitoring-Daten…</span></div>
+  <div class="synth-msg" id="synth-error" style="display:none"><div class="big-icon">⚠️</div><strong style="color:var(--ink)">Worker nicht erreichbar</strong><code id="synth-err-msg" style="font-family:var(--mono);font-size:12px;color:var(--fail)"></code><p style="font-size:13px;color:var(--muted)">Starte den Worker unter <code>timocom-sitemap-monitor.hdpasso29.workers.dev/results</code></p></div>
+  <div id="synth-content" style="display:none"><div class="synth-global" id="synth-global"></div><div class="synth-grid" id="synth-grid"></div></div>
+</div>
+
+<!-- Agents panel -->
+<div id="agents-panel">
+  <div class="agents-empty" id="agents-loading"><div class="spinner"></div><span style="font-family:var(--mono);font-size:13px;color:var(--muted)">Fetching agents-results.json…</span></div>
+  <div class="agents-empty" id="agents-error" style="display:none">
+    <div class="big-icon">🤖</div>
+    <strong style="color:var(--ink)">No agent results yet</strong>
+    <p style="font-size:13px">Run the Playwright agents locally, then push <code>agents-results.json</code> to this repo.</p>
+    <code>node scripts/export-agents-results.js</code>
   </div>
-  <div class="synth-msg" id="synth-error" style="display:none">
-    <div class="big-icon">⚠️</div>
-    <strong style="color:var(--ink)">Worker nicht erreichbar</strong>
-    <code id="synth-err-msg" style="font-family:var(--mono);font-size:12px;color:var(--fail)"></code>
-    <p style="font-size:13px;color:var(--muted)">Starte den Worker unter <code>timocom-sitemap-monitor.hdpasso29.workers.dev/results</code></p>
-  </div>
-  <div id="synth-content" style="display:none">
-    <div class="synth-global" id="synth-global"></div>
-    <div class="synth-grid" id="synth-grid"></div>
+  <div id="agents-content" style="display:none">
+    <div class="agents-header">
+      <div>
+        <div class="agents-title">🤖 Playwright Agents</div>
+        <div class="agents-meta" id="agents-run-meta">–</div>
+      </div>
+      <a href="https://github.com/hdemirhan-dev/timocom-playwright-agents" target="_blank" class="agents-repo-link">↗ GitHub Repo</a>
+    </div>
+    <div class="agents-scorecard" id="agents-scorecard"></div>
+    <div class="agents-pipeline" id="agents-pipeline"></div>
+    <div class="agents-suites" id="agents-suites"></div>
   </div>
 </div>
 
 <script>
+// ── Shared helpers ──────────────────────────────────────────────────────────
 let DATA = null, activeId = null;
 
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function hide(id) { const el=document.getElementById(id); if(el) el.style.display='none'; }
+function showFlex(id) { const el=document.getElementById(id); if(el) el.style.display='flex'; }
+function showBlock(id) { const el=document.getElementById(id); if(el) el.style.display='block'; }
+function fmtDate(iso) {
+  if (!iso) return '–';
+  try { return new Date(iso).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',timeZoneName:'short'}); }
+  catch { return iso; }
+}
+
+// ── E2E ────────────────────────────────────────────────────────────────────
 async function load() {
   try {
     const res = await fetch('./test-results.json', { cache: 'no-cache' });
@@ -316,108 +342,101 @@ async function load() {
     onLoaded();
   } catch (e) { showError(e.message); }
 }
-
 function showError(msg) {
-  hide('loading-state'); show('error-state');
+  hide('loading-state'); showFlex('error-state');
   document.getElementById('err-msg').textContent = msg;
   document.getElementById('live-dot').style.background = 'var(--fail)';
   document.getElementById('run-time').textContent = 'No data';
 }
-
 function onLoaded() {
-  hide('loading-state'); show('empty-state');
+  hide('loading-state'); showFlex('empty-state');
   renderGlobal(); renderSidebar();
   if (DATA.suites?.length) selectSuite(DATA.suites[0].id);
 }
-
 function counts(suite) {
-  const r = { pass:0, fail:0, skip:0 };
-  (suite.tests||[]).forEach(t => { r[t.status]=(r[t.status]||0)+1; });
+  const r={pass:0,fail:0,skip:0};
+  (suite.tests||[]).forEach(t=>{r[t.status]=(r[t.status]||0)+1;});
   return r;
 }
 function allCounts() {
   let p=0,f=0,s=0;
-  (DATA.suites||[]).forEach(suite => { const c=counts(suite); p+=c.pass; f+=c.fail; s+=c.skip; });
+  (DATA.suites||[]).forEach(suite=>{const c=counts(suite);p+=c.pass;f+=c.fail;s+=c.skip;});
   return {p,f,s};
 }
-function fmtDate(iso) {
-  if (!iso) return '–';
-  try { return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short' }); }
-  catch { return iso; }
-}
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function hide(id) { document.getElementById(id).style.display = 'none'; }
-function show(id) { document.getElementById(id).style.display = 'flex'; }
-
 function renderGlobal() {
-  const {p,f,s} = allCounts();
-  const total = (p+f+s)||1;
-  document.getElementById('s-pass').style.width = (p/total*100)+'%';
-  document.getElementById('s-fail').style.width = (f/total*100)+'%';
-  document.getElementById('s-skip').style.width = (s/total*100)+'%';
-  document.getElementById('scorecard').innerHTML =
-    `<div class="pill pill-pass">✓ ${p} passed</div>` +
-    (f ? `<div class="pill pill-fail">✗ ${f} failed</div>` : '') +
-    (s ? `<div class="pill pill-skip">⊘ ${s} skipped</div>` : '');
-  const meta = DATA.meta||{};
-  document.getElementById('run-time').textContent = meta.runAt ? 'Run: '+fmtDate(meta.runAt) : '–';
-  document.getElementById('live-dot').style.background = f>0 ? 'var(--fail)' : 'var(--pass)';
+  const {p,f,s}=allCounts(); const total=(p+f+s)||1;
+  document.getElementById('s-pass').style.width=(p/total*100)+'%';
+  document.getElementById('s-fail').style.width=(f/total*100)+'%';
+  document.getElementById('s-skip').style.width=(s/total*100)+'%';
+  document.getElementById('scorecard').innerHTML=
+    `<div class="pill pill-pass">✓ ${p} passed</div>`+
+    (f?`<div class="pill pill-fail">✗ ${f} failed</div>`:'')+
+    (s?`<div class="pill pill-skip">⊘ ${s} skipped</div>`:'');
+  const meta=DATA.meta||{};
+  document.getElementById('run-time').textContent=meta.runAt?'Run: '+fmtDate(meta.runAt):'–';
+  document.getElementById('live-dot').style.background=f>0?'var(--fail)':'var(--pass)';
 }
-
 function renderSidebar() {
-  document.getElementById('suite-list').innerHTML = (DATA.suites||[]).map(s => {
-    const c = counts(s);
-    const cls = c.fail>0 ? 'badge-fail' : c.skip>0 ? 'badge-mixed' : 'badge-pass';
-    const txt = c.fail>0 ? `${c.fail} failed` : c.skip>0 ? `${c.skip} skipped` : 'all pass';
+  document.getElementById('suite-list').innerHTML=(DATA.suites||[]).map(s=>{
+    const c=counts(s);
+    const cls=c.fail>0?'badge-fail':c.skip>0?'badge-mixed':'badge-pass';
+    const txt=c.fail>0?`${c.fail} failed`:c.skip>0?`${c.skip} skipped`:'all pass';
     return `<div class="suite-item ${s.id===activeId?'active':''}" onclick="selectSuite('${esc(s.id)}')">
       <div class="suite-icon">${s.icon||'🧪'}</div>
-      <div class="suite-info">
-        <div class="suite-name">${esc(s.name)}</div>
-        <div class="suite-sub">${(s.tests||[]).length} tests · ${s.duration||'–'}</div>
-      </div>
+      <div class="suite-info"><div class="suite-name">${esc(s.name)}</div><div class="suite-sub">${(s.tests||[]).length} tests · ${s.duration||'–'}</div></div>
       <div class="suite-badge ${cls}">${txt}</div>
     </div>`;
   }).join('');
 }
 
+const VITALS_THRESHOLDS={TTFB:{good:800,needs:1800},LCP:{good:2500,needs:4000},CLS:{good:0.1,needs:0.25}};
+function classifyVital(m,v){const t=VITALS_THRESHOLDS[m];if(!t)return'good';if(v<=t.good)return'good';if(v<=t.needs)return'needs';return'poor';}
+function vitalsBadgeLabel(c){return c==='good'?'✓ Good':c==='needs'?'△ Needs Improvement':'✗ Poor';}
+function vitalsBarColor(c){return c==='good'?'var(--pass)':c==='needs'?'var(--skip)':'var(--fail)';}
+function vitalsBarWidth(m,v){const t=VITALS_THRESHOLDS[m];if(!t)return 50;return Math.min(100,Math.round((v/(t.needs*1.5))*100));}
+function renderVitalsCard(t,i){
+  const m=t.vitalsMetric,v=t.vitalsValue,u=t.vitalsUnit||'',c=classifyVital(m,v);
+  const dv=u==='score'?v.toFixed(3):Math.round(v)+'ms';
+  const bw=vitalsBarWidth(m,v),bc=vitalsBarColor(c);
+  const pn=t.name.replace(/^(TTFB|LCP|CLS)\s*[—-]\s*/i,'');
+  return `<div class="test-card" id="tc-${i}" style="border-left:3px solid ${bc}">
+    <div class="vitals-row">
+      <div class="vitals-metric-name">${esc(m)}</div>
+      <div class="vitals-value" style="color:${bc}">${dv}</div>
+      <div class="vitals-bar-wrap"><div class="vitals-bar" style="width:${bw}%;background:${bc}"></div></div>
+      <div class="vitals-badge badge-${c}">${vitalsBadgeLabel(c)}</div>
+      <div class="tc-time" style="margin-left:4px">${esc(pn)}</div>
+    </div>
+    ${t.error?`<div style="padding:0 14px 10px"><div class="error-block">${esc(t.error)}</div></div>`:''}
+  </div>`;
+}
+
 function renderDetail(suite) {
-  const c = counts(suite);
-  const total = (suite.tests||[]).length||1;
-  const isVitalsSuite = (suite.name||'').toLowerCase().includes('web-vitals');
-  const tests = (suite.tests||[]).map((t,i) => {
-    if (isVitalsSuite && t.vitalsMetric != null && t.vitalsValue != null) {
-      return renderVitalsCard(t, i);
-    }
-    return `
-    <div class="test-card" id="tc-${i}" onclick="toggleCard(${i})">
+  const c=counts(suite);const total=(suite.tests||[]).length||1;
+  const isVitals=(suite.name||'').toLowerCase().includes('web-vitals');
+  const tests=(suite.tests||[]).map((t,i)=>{
+    if(isVitals&&t.vitalsMetric!=null&&t.vitalsValue!=null)return renderVitalsCard(t,i);
+    return `<div class="test-card" id="tc-${i}" onclick="toggleCard(${i})">
       <div class="tc-header">
         <div class="status-dot dot-${t.status}"></div>
         <div class="tc-name">${esc(t.name)}</div>
-        ${t.ms ? `<div class="tc-time">${t.ms} ms</div>` : ''}
+        ${t.ms?`<div class="tc-time">${t.ms} ms</div>`:''}
         <div class="tc-tag tag-${t.status}">${(t.status||'').toUpperCase()}</div>
       </div>
       <div class="tc-detail">
-        ${t.locator ? `<div class="detail-row"><div class="detail-key">Locator</div><div class="detail-val">${esc(t.locator)}</div></div>` : ''}
-        ${t.step    ? `<div class="detail-row"><div class="detail-key">Step</div><div class="detail-val">${esc(t.step)}</div></div>` : ''}
-        ${t.retry   ? `<div class="detail-row"><div class="detail-key">Retry</div><div class="detail-val">${t.retry}×</div></div>` : ''}
-        ${t.error   ? `<div class="error-block">${esc(t.error)}</div>` : ''}
+        ${t.locator?`<div class="detail-row"><div class="detail-key">Locator</div><div class="detail-val">${esc(t.locator)}</div></div>`:''}
+        ${t.step?`<div class="detail-row"><div class="detail-key">Step</div><div class="detail-val">${esc(t.step)}</div></div>`:''}
+        ${t.retry?`<div class="detail-row"><div class="detail-key">Retry</div><div class="detail-val">${t.retry}×</div></div>`:''}
+        ${t.error?`<div class="error-block">${esc(t.error)}</div>`:''}
       </div>
     </div>`;
   }).join('');
-  const meta = DATA.meta||{};
-  document.getElementById('detail-panel').innerHTML = `
+  const meta=DATA.meta||{};
+  document.getElementById('detail-panel').innerHTML=`
     <div class="panel-header">
       <div class="panel-icon">${suite.icon||'🧪'}</div>
-      <div>
-        <div class="panel-title">${esc(suite.name)}</div>
-        ${suite.url ? `<div class="panel-url">${esc(suite.url)}</div>` : ''}
-      </div>
-      <div class="panel-dur">
-        <div class="dur-val">${suite.duration||'–'}</div>
-        <div class="dur-lbl">duration</div>
-      </div>
+      <div><div class="panel-title">${esc(suite.name)}</div>${suite.url?`<div class="panel-url">${esc(suite.url)}</div>`:''}</div>
+      <div class="panel-dur"><div class="dur-val">${suite.duration||'–'}</div><div class="dur-lbl">duration</div></div>
     </div>
     <div class="suite-progress">
       <div class="prog-pass" style="width:${(c.pass/total*100).toFixed(1)}%"></div>
@@ -430,168 +449,137 @@ function renderDetail(suite) {
       <span>Run: ${fmtDate(meta.runAt)} · ${esc(meta.browser||'Playwright')}</span>
     </div>`;
 }
-
-// ---------------------------------------------------------------------------
-// Vitals classification helpers
-// ---------------------------------------------------------------------------
-const VITALS_THRESHOLDS = {
-  TTFB: { good: 800,  needs: 1800 },
-  LCP:  { good: 2500, needs: 4000 },
-  CLS:  { good: 0.1,  needs: 0.25 },
-};
-
-function classifyVital(metric, value) {
-  const t = VITALS_THRESHOLDS[metric];
-  if (!t) return 'good';
-  if (value <= t.good)  return 'good';
-  if (value <= t.needs) return 'needs';
-  return 'poor';
+function selectSuite(id){
+  activeId=id;const suite=(DATA.suites||[]).find(s=>s.id===id);if(!suite)return;
+  hide('empty-state');document.getElementById('detail-panel').style.display='block';
+  renderDetail(suite);renderSidebar();
 }
-
-function vitalsBadgeLabel(cls) {
-  if (cls === 'good')  return '✓ Good';
-  if (cls === 'needs') return '△ Needs Improvement';
-  return '✗ Poor';
-}
-
-function vitalsBarColor(cls) {
-  if (cls === 'good')  return 'var(--pass)';
-  if (cls === 'needs') return 'var(--skip)';
-  return 'var(--fail)';
-}
-
-function vitalsBarWidth(metric, value) {
-  const t = VITALS_THRESHOLDS[metric];
-  if (!t) return 50;
-  const max = t.needs * 1.5;
-  return Math.min(100, Math.round((value / max) * 100));
-}
-
-function renderVitalsCard(t, i) {
-  const metric = t.vitalsMetric;
-  const value  = t.vitalsValue;
-  const unit   = t.vitalsUnit || '';
-  const cls    = classifyVital(metric, value);
-  const displayVal = unit === 'score' ? value.toFixed(3) : Math.round(value) + 'ms';
-  const barW   = vitalsBarWidth(metric, value);
-  const barCol = vitalsBarColor(cls);
-  const pageName = t.name.replace(/^(TTFB|LCP|CLS)\s*[—-]\s*/i, '');
-
-  return `<div class="test-card" id="tc-${i}" style="border-left: 3px solid ${barCol}">
-    <div class="vitals-row">
-      <div class="vitals-metric-name">${esc(metric)}</div>
-      <div class="vitals-value" style="color:${barCol}">${displayVal}</div>
-      <div class="vitals-bar-wrap"><div class="vitals-bar" style="width:${barW}%;background:${barCol}"></div></div>
-      <div class="vitals-badge badge-${cls}">${vitalsBadgeLabel(cls)}</div>
-      <div class="tc-time" style="margin-left:4px">${esc(pageName)}</div>
-    </div>
-    ${t.error ? `<div style="padding:0 14px 10px"><div class="error-block">${esc(t.error)}</div></div>` : ''}
-  </div>`;
-}
-
-function selectSuite(id) {
-  activeId = id;
-  const suite = (DATA.suites||[]).find(s => s.id===id);
-  if (!suite) return;
-  hide('empty-state');
-  document.getElementById('detail-panel').style.display = 'block';
-  renderDetail(suite); renderSidebar();
-}
-function toggleCard(i) { document.getElementById(`tc-${i}`)?.classList.toggle('open'); }
-
+function toggleCard(i){document.getElementById(`tc-${i}`)?.classList.toggle('open');}
 load();
 
-// ---------------------------------------------------------------------------
-// Tab switching
-// ---------------------------------------------------------------------------
-function switchTab(tab) {
-  const isE2e = tab === 'e2e';
-  document.getElementById('tab-e2e').classList.toggle('active', isE2e);
-  document.getElementById('tab-synth').classList.toggle('active', !isE2e);
-  document.getElementById('layout').style.display = isE2e ? 'grid' : 'none';
-  document.getElementById('synth-panel').style.display = isE2e ? 'none' : 'block';
-  if (!isE2e && !SYNTH_DATA) loadSynth();
+// ── Synthetic ───────────────────────────────────────────────────────────────
+const WORKER_URL='https://timocom-sitemap-monitor.hdpasso29.workers.dev/results';
+let SYNTH_DATA=null;
+async function loadSynth(){
+  try{
+    const res=await fetch(WORKER_URL,{cache:'no-cache'});
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    SYNTH_DATA=await res.json();renderSynth();
+  }catch(e){
+    hide('synth-loading');showFlex('synth-error');
+    document.getElementById('synth-err-msg').textContent=e.message;
+  }
+}
+function renderSynth(){
+  hide('synth-loading');showBlock('synth-content');
+  const g=SYNTH_DATA.global||{};
+  const uc=g.uptime>=99?'var(--pass)':g.uptime>=95?'var(--skip)':'var(--fail)';
+  const tc=g.avgTtfb<600?'var(--pass)':g.avgTtfb<1200?'var(--skip)':'var(--fail)';
+  document.getElementById('synth-global').innerHTML=`
+    <div class="sg-card"><div class="sg-val" style="color:${uc}">${g.uptime??'–'}%</div><div class="sg-lbl">Uptime</div></div>
+    <div class="sg-card"><div class="sg-val" style="color:${tc}">${g.avgTtfb??'–'}ms</div><div class="sg-lbl">Avg TTFB</div></div>
+    <div class="sg-card"><div class="sg-val" style="color:var(--pass)">${g.passed??'–'}</div><div class="sg-lbl">Erreichbar</div></div>
+    <div class="sg-card"><div class="sg-val" style="color:var(--muted)">${g.total??'–'}</div><div class="sg-lbl">URLs gesamt</div></div>
+    <div class="sg-card"><div class="sg-val" style="color:var(--muted);font-size:1rem">${fmtDate(SYNTH_DATA.meta?.runAt)}</div><div class="sg-lbl">Letzter Run</div></div>`;
+  const urls=SYNTH_DATA.urls||[];
+  document.getElementById('synth-grid').innerHTML=urls.map(u=>{
+    const tc2=u.ttfb<600?'fast':u.ttfb>1500?'slow':'';
+    const sm=Math.max(...(u.trend||[1]),1);
+    const sb=(u.trend||[]).map(v=>`<div class="spark-bar" style="height:${Math.max(4,Math.round((v/sm)*28))}px" title="${v}ms"></div>`).join('');
+    return `<div class="url-card ${u.ok?'card-ok':'card-fail'}">
+      <div class="url-card-top"><span class="url-icon">${esc(u.icon||'🌐')}</span><span class="url-label">${esc(u.label)}</span><span class="url-status-badge ${u.ok?'badge-ok':'badge-fail'}">${u.ok?'✓ '+u.status:'✗ '+(u.status||'ERR')}</span></div>
+      <div class="url-path">${esc(new URL(u.url).pathname||'/')}</div>
+      <div class="url-metrics"><div class="metric"><span class="metric-val ${tc2}">${u.ttfb}ms</span><span class="metric-lbl">TTFB</span></div>${u.redirected?`<div class="metric"><span class="metric-val" style="color:var(--blue)">↪</span><span class="metric-lbl">Redirect</span></div>`:''}</div>
+      ${u.trend?.length>1?`<div class="sparkline">${sb}</div>`:''}
+      <div class="url-footer">${u.keywordFound!==undefined?`<span class="kw-badge ${u.keywordFound?'kw-ok':'kw-fail'}">${u.keywordFound?'✓ keyword':'✗ keyword missing'}</span>`:''} ${u.error?`<span class="error-note">${esc(u.error)}</span>`:''}</div>
+    </div>`;
+  }).join('');
 }
 
-// ---------------------------------------------------------------------------
-// Synthetic Monitoring
-// ---------------------------------------------------------------------------
-const WORKER_URL = 'https://timocom-sitemap-monitor.hdpasso29.workers.dev/results';
-let SYNTH_DATA = null;
+// ── Agents ──────────────────────────────────────────────────────────────────
+let AGENTS_DATA = null;
 
-async function loadSynth() {
+async function loadAgents() {
+  if (AGENTS_DATA) return;
   try {
-    const res = await fetch(WORKER_URL, { cache: 'no-cache' });
+    const res = await fetch('./agents-results.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    SYNTH_DATA = await res.json();
-    renderSynth();
-  } catch (e) {
-    document.getElementById('synth-loading').style.display = 'none';
-    document.getElementById('synth-error').style.display = 'flex';
-    document.getElementById('synth-err-msg').textContent = e.message;
+    AGENTS_DATA = await res.json();
+    renderAgents();
+  } catch(e) {
+    hide('agents-loading');
+    showFlex('agents-error');
   }
 }
 
-function renderSynth() {
-  document.getElementById('synth-loading').style.display = 'none';
-  document.getElementById('synth-content').style.display = 'block';
+function renderAgents() {
+  hide('agents-loading');
+  showBlock('agents-content');
 
-  const g = SYNTH_DATA.global || {};
-  const uptimeColor = g.uptime >= 99 ? 'var(--pass)' : g.uptime >= 95 ? 'var(--skip)' : 'var(--fail)';
-  const ttfbColor   = g.avgTtfb < 600 ? 'var(--pass)' : g.avgTtfb < 1200 ? 'var(--skip)' : 'var(--fail)';
+  const meta = AGENTS_DATA.meta || {};
+  document.getElementById('agents-run-meta').textContent =
+    `Last run: ${fmtDate(meta.runAt)} · ${meta.totalTests||0} tests · ${meta.duration||'–'}`;
 
-  document.getElementById('synth-global').innerHTML = `
-    <div class="sg-card">
-      <div class="sg-val" style="color:${uptimeColor}">${g.uptime ?? '–'}%</div>
-      <div class="sg-lbl">Uptime</div>
-    </div>
-    <div class="sg-card">
-      <div class="sg-val" style="color:${ttfbColor}">${g.avgTtfb ?? '–'}ms</div>
-      <div class="sg-lbl">Avg TTFB</div>
-    </div>
-    <div class="sg-card">
-      <div class="sg-val" style="color:var(--pass)">${g.passed ?? '–'}</div>
-      <div class="sg-lbl">Erreichbar</div>
-    </div>
-    <div class="sg-card">
-      <div class="sg-val" style="color:var(--muted)">${g.total ?? '–'}</div>
-      <div class="sg-lbl">URLs gesamt</div>
-    </div>
-    <div class="sg-card" style="grid-column: span 1">
-      <div class="sg-val" style="color:var(--muted);font-size:1rem">${fmtDate(SYNTH_DATA.meta?.runAt)}</div>
-      <div class="sg-lbl">Letzter Run</div>
-    </div>`;
+  // Scorecard
+  const p=meta.passed||0, f=meta.failed||0, x=meta.fixme||0;
+  const total=(p+f+x)||1;
+  document.getElementById('agents-scorecard').innerHTML = `
+    <div class="asc-card"><div class="asc-val" style="color:var(--pass)">${p}</div><div class="asc-lbl">Passed</div></div>
+    <div class="asc-card"><div class="asc-val" style="color:var(--fail)">${f}</div><div class="asc-lbl">Failed</div></div>
+    <div class="asc-card"><div class="asc-val" style="color:var(--fixme)">${x}</div><div class="asc-lbl">Fixme</div></div>
+    <div class="asc-card"><div class="asc-val" style="color:var(--muted)">${total}</div><div class="asc-lbl">Total</div></div>`;
 
-  const urls = SYNTH_DATA.urls || [];
-  document.getElementById('synth-grid').innerHTML = urls.map(u => {
-    const ttfbClass = u.ttfb < 600 ? 'fast' : u.ttfb > 1500 ? 'slow' : '';
-    const sparkMax  = Math.max(...(u.trend || [1]), 1);
-    const sparkBars = (u.trend || []).map(v => {
-      const h = Math.max(4, Math.round((v / sparkMax) * 28));
-      return `<div class="spark-bar" style="height:${h}px" title="${v}ms"></div>`;
-    }).join('');
+  // Pipeline steps
+  const pipeline = AGENTS_DATA.pipeline || [];
+  document.getElementById('agents-pipeline').innerHTML = pipeline.map(s => `
+    <div class="pipeline-step">
+      <span class="ps-icon">${s.icon||'🤖'}</span>
+      <div class="ps-name">${esc(s.name)}</div>
+      <div class="ps-model">${esc(s.model||'')}</div>
+      <div class="ps-status ${s.ran?'ps-done':'ps-idle'}">${s.ran?(s.duration||'done'):'idle'}</div>
+    </div>`).join('');
 
-    return `<div class="url-card ${u.ok ? 'card-ok' : 'card-fail'}">
-      <div class="url-card-top">
-        <span class="url-icon">${esc(u.icon || '🌐')}</span>
-        <span class="url-label">${esc(u.label)}</span>
-        <span class="url-status-badge ${u.ok ? 'badge-ok' : 'badge-fail'}">${u.ok ? '✓ ' + u.status : '✗ ' + (u.status || 'ERR')}</span>
+  // Suites
+  document.getElementById('agents-suites').innerHTML = (AGENTS_DATA.suites||[]).map((suite,si) => {
+    const sp=suite.tests.filter(t=>t.status==='pass').length;
+    const sf=suite.tests.filter(t=>t.status==='fail').length;
+    const sx=suite.tests.filter(t=>t.status==='fixme').length;
+    const tests = suite.tests.map(t => `
+      <div class="at-row">
+        <div class="at-dot at-dot-${t.status}"></div>
+        <div class="at-name">${esc(t.name)}</div>
+        ${t.ms?`<div class="at-ms">${t.ms}ms</div>`:''}
+        <div class="at-tag at-tag-${t.status}">${t.status.toUpperCase()}</div>
       </div>
-      <div class="url-path">${esc(new URL(u.url).pathname || '/')}</div>
-      <div class="url-metrics">
-        <div class="metric">
-          <span class="metric-val ${ttfbClass}">${u.ttfb}ms</span>
-          <span class="metric-lbl">TTFB</span>
+      ${t.error?`<div class="at-error">${esc(t.error)}</div>`:''}`).join('');
+    return `<div class="agent-suite ${si===0?'open':''}" id="as-${si}">
+      <div class="as-header" onclick="toggleSuite(${si})">
+        <div class="as-icon">${suite.icon||'📄'}</div>
+        <div class="as-name">${esc(suite.name)}</div>
+        <div class="as-counts">
+          ${sp?`<span class="as-badge as-pass">✓ ${sp}</span>`:''}
+          ${sf?`<span class="as-badge as-fail">✗ ${sf}</span>`:''}
+          ${sx?`<span class="as-badge as-fixme">⊘ ${sx}</span>`:''}
         </div>
-        ${u.redirected ? `<div class="metric"><span class="metric-val" style="color:var(--blue)">↪</span><span class="metric-lbl">Redirect</span></div>` : ''}
+        <div class="as-duration">${suite.duration||''}</div>
       </div>
-      ${u.trend?.length > 1 ? `<div class="sparkline">${sparkBars}</div>` : ''}
-      <div class="url-footer">
-        ${u.keywordFound !== undefined ? `<span class="kw-badge ${u.keywordFound ? 'kw-ok' : 'kw-fail'}">${u.keywordFound ? '✓ keyword' : '✗ keyword missing'}</span>` : ''}
-        ${u.error ? `<span class="error-note">${esc(u.error)}</span>` : ''}
-      </div>
+      <div class="as-tests">${tests}</div>
     </div>`;
   }).join('');
+}
+
+function toggleSuite(i) { document.getElementById(`as-${i}`)?.classList.toggle('open'); }
+
+// ── Tab switching ───────────────────────────────────────────────────────────
+function switchTab(tab) {
+  ['e2e','synth','agents'].forEach(t => {
+    document.getElementById(`tab-${t}`).classList.toggle('active', t===tab);
+  });
+  document.getElementById('layout').style.display       = tab==='e2e'    ? 'grid'  : 'none';
+  document.getElementById('synth-panel').style.display  = tab==='synth'  ? 'block' : 'none';
+  document.getElementById('agents-panel').style.display = tab==='agents' ? 'block' : 'none';
+  if (tab==='synth'  && !SYNTH_DATA)  loadSynth();
+  if (tab==='agents' && !AGENTS_DATA) loadAgents();
 }
 </script>
 </body>
