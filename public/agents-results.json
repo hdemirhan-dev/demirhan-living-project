@@ -1,7 +1,7 @@
 {
   "meta": {
-    "runAt": "2026-06-29T21:22:54.648Z",
-    "duration": "33.8s",
+    "runAt": "2026-06-30T12:33:44.399Z",
+    "duration": "24.8s",
     "totalTests": 9,
     "passed": 9,
     "failed": 0,
@@ -37,24 +37,24 @@
       "name": "Homepage",
       "icon": "🏠",
       "file": "homepage.spec.ts",
-      "duration": "7.8s",
+      "duration": "6.2s",
       "tests": [
         {
           "name": "hero section and primary CTA",
           "status": "pass",
-          "ms": 3114,
+          "ms": 2330,
           "error": null
         },
         {
           "name": "main navigation links",
           "status": "pass",
-          "ms": 2441,
+          "ms": 2035,
           "error": null
         },
         {
           "name": "freight search widget",
           "status": "pass",
-          "ms": 2236,
+          "ms": 1793,
           "error": null
         }
       ]
@@ -63,24 +63,24 @@
       "name": "Registration",
       "icon": "📝",
       "file": "registration.spec.ts",
-      "duration": "13.0s",
+      "duration": "10.5s",
       "tests": [
         {
           "name": "company type selection — step 1",
           "status": "pass",
-          "ms": 4246,
+          "ms": 3006,
           "error": null
         },
         {
           "name": "contact information",
           "status": "pass",
-          "ms": 4067,
+          "ms": 4618,
           "error": null
         },
         {
           "name": "minimal navigation",
           "status": "pass",
-          "ms": 4670,
+          "ms": 2834,
           "error": null
         }
       ]
@@ -89,24 +89,24 @@
       "name": "Services",
       "icon": "🛠️",
       "file": "services.spec.ts",
-      "duration": "13.0s",
+      "duration": "8.2s",
       "tests": [
         {
           "name": "page layout, breadcrumb, and statistics",
           "status": "pass",
-          "ms": 4162,
+          "ms": 2614,
           "error": null
         },
         {
           "name": "service category tabs and cards",
           "status": "pass",
-          "ms": 4665,
+          "ms": 2901,
           "error": null
         },
         {
           "name": "role-based solution cards and customer testimonial",
           "status": "pass",
-          "ms": 4218,
+          "ms": 2646,
           "error": null
         }
       ]
