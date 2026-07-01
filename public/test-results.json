@@ -1,46 +1,22 @@
 {
   "meta": {
-    "runAt": "2026-06-26T16:13:25.281Z",
-    "finishedAt": "2026-06-26T16:14:47.740Z",
+    "runAt": "2026-07-01T05:38:56.426Z",
+    "finishedAt": "2026-07-01T05:40:22.381Z",
     "browser": "Chromium (Playwright)",
     "project": "timocom-ai-tests",
     "source": "https://gitlab.com/hdquality/timocom-ai-tests/-/pipelines"
   },
   "suites": [
     {
-      "id": "chromium--authneue-benutzer-registrierungspecjs--neue-benutzer-registrierung",
-      "name": "chromium › auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung",
+      "id": "setup--testsauthsetupjs",
+      "name": "setup › tests/auth.setup.js",
       "icon": "🔐",
       "url": "",
       "tests": [
         {
-          "name": "TC-001: Valid registration — page reachable and form present",
+          "name": "authenticate",
           "status": "pass",
-          "ms": 2762,
-          "locator": "After Hooks",
-          "step": "After Hooks",
-          "error": null,
-          "retry": null,
-          "vitalsMetric": null,
-          "vitalsValue": null,
-          "vitalsUnit": null
-        },
-        {
-          "name": "TC-002: Invalid email — form is not submitted",
-          "status": "pass",
-          "ms": 3423,
-          "locator": "After Hooks",
-          "step": "After Hooks",
-          "error": null,
-          "retry": null,
-          "vitalsMetric": null,
-          "vitalsValue": null,
-          "vitalsUnit": null
-        },
-        {
-          "name": "TC-003: Empty required fields — form stays on registration page",
-          "status": "pass",
-          "ms": 5665,
+          "ms": 1876,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -50,18 +26,18 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "11.8s"
+      "duration": "1.9s"
     },
     {
-      "id": "chromium--miscresponsive-design-browser-kompatibilitaetspecjs--responsive-design--browser-kompatibilitt",
-      "name": "chromium › misc/responsive-design-browser-kompatibilitaet.spec.js › Responsive Design & Browser-Kompatibilität",
-      "icon": "📱",
+      "id": "chromium--testsauthneue-benutzer-registrierungspecjs--neue-benutzer-registrierung--spedition",
+      "name": "chromium › tests/auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung — Spedition",
+      "icon": "🔐",
       "url": "",
       "tests": [
         {
-          "name": "TC-001: Mobile (375px) Navigation — Hamburger-Menü sichtbar, alle Links erreichbar",
+          "name": "TC-001 [Spedition]: Valid registration — page reachable and form present",
           "status": "pass",
-          "ms": 5273,
+          "ms": 1578,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -71,9 +47,9 @@
           "vitalsUnit": null
         },
         {
-          "name": "TC-002: Tablet (768px) Layout — Formularfelder sichtbar und ausreichend breit",
+          "name": "TC-002 [Spedition]: Invalid email — form is not submitted",
           "status": "pass",
-          "ms": 6697,
+          "ms": 1499,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -83,9 +59,9 @@
           "vitalsUnit": null
         },
         {
-          "name": "TC-003: Desktop (1920px) Layout — Navigation und Formular vollständig sichtbar",
+          "name": "TC-003 [Spedition]: Empty required fields — form stays on registration page",
           "status": "pass",
-          "ms": 7252,
+          "ms": 1764,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -95,18 +71,18 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "19.2s"
+      "duration": "4.8s"
     },
     {
-      "id": "chromium--miscsprachenwechselspecjs--sprachenwechsel",
-      "name": "chromium › misc/sprachenwechsel.spec.js › Sprachenwechsel",
+      "id": "chromium--testsmiscsprachenwechselspecjs--sprachenwechsel",
+      "name": "chromium › tests/misc/sprachenwechsel.spec.js › Sprachenwechsel",
       "icon": "🌐",
       "url": "",
       "tests": [
         {
-          "name": "TC-002: Switch to Español",
+          "name": "TC-001: Switch to English",
           "status": "pass",
-          "ms": 4902,
+          "ms": 2684,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -116,9 +92,9 @@
           "vitalsUnit": null
         },
         {
-          "name": "TC-001: Switch to English",
+          "name": "TC-002: Switch to Español",
           "status": "pass",
-          "ms": 6215,
+          "ms": 2602,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -130,7 +106,7 @@
         {
           "name": "TC-003: Language persists after reload",
           "status": "pass",
-          "ms": 6070,
+          "ms": 2772,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -140,18 +116,63 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "17.2s"
+      "duration": "8.1s"
     },
     {
-      "id": "chromium--miscsuchfeld-validierung-autocompletionspecjs--suchfeld-validierung--autocompletion",
-      "name": "chromium › misc/suchfeld-validierung-autocompletion.spec.js › Suchfeld-Validierung & Autocompletion",
+      "id": "chromium--testsauthneue-benutzer-registrierungspecjs--neue-benutzer-registrierung--frachtfhrer",
+      "name": "chromium › tests/auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung — Frachtführer",
+      "icon": "🔐",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001 [Frachtführer]: Valid registration — page reachable and form present",
+          "status": "pass",
+          "ms": 1189,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-002 [Frachtführer]: Invalid email — form is not submitted",
+          "status": "pass",
+          "ms": 1593,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-003 [Frachtführer]: Empty required fields — form stays on registration page",
+          "status": "pass",
+          "ms": 1689,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        }
+      ],
+      "duration": "4.5s"
+    },
+    {
+      "id": "chromium--testsmiscsuchfeld-validierung-autocompletionspecjs--suchfeld-validierung--autocompletion",
+      "name": "chromium › tests/misc/suchfeld-validierung-autocompletion.spec.js › Suchfeld-Validierung & Autocompletion",
       "icon": "🔍",
       "url": "",
       "tests": [
         {
           "name": "TC-001: Valid city input — search responds",
           "status": "pass",
-          "ms": 5780,
+          "ms": 1517,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -163,7 +184,7 @@
         {
           "name": "TC-002: Special characters — page stays stable",
           "status": "pass",
-          "ms": 4768,
+          "ms": 1450,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -175,7 +196,7 @@
         {
           "name": "TC-003: Empty search — page stays stable",
           "status": "pass",
-          "ms": 5240,
+          "ms": 1336,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -185,18 +206,63 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "15.8s"
+      "duration": "4.3s"
     },
     {
-      "id": "chromium--navigationservices-uebersicht-erkundenspecjs--services-bersicht-erkunden",
-      "name": "chromium › navigation/services-uebersicht-erkunden.spec.js › Services-Übersicht erkunden",
+      "id": "chromium--testsauthneue-benutzer-registrierungspecjs--neue-benutzer-registrierung--handel",
+      "name": "chromium › tests/auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung — Handel",
+      "icon": "🔐",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001 [Handel]: Valid registration — page reachable and form present",
+          "status": "pass",
+          "ms": 913,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-002 [Handel]: Invalid email — form is not submitted",
+          "status": "pass",
+          "ms": 3345,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-003 [Handel]: Empty required fields — form stays on registration page",
+          "status": "pass",
+          "ms": 1604,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        }
+      ],
+      "duration": "5.9s"
+    },
+    {
+      "id": "chromium--testsnavigationservices-uebersicht-erkundenspecjs--services-bersicht-erkunden",
+      "name": "chromium › tests/navigation/services-uebersicht-erkunden.spec.js › Services-Übersicht erkunden",
       "icon": "🧭",
       "url": "",
       "tests": [
         {
-          "name": "TC-001: Navigate to services page",
+          "name": "TC-001: Services overview is reachable",
           "status": "pass",
-          "ms": 4696,
+          "ms": 1479,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -206,9 +272,9 @@
           "vitalsUnit": null
         },
         {
-          "name": "TC-002: Freight exchange page is reachable",
+          "name": "TC-002: Freight exchange (Frachtenbörse) is reachable",
           "status": "pass",
-          "ms": 4885,
+          "ms": 1204,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -218,9 +284,9 @@
           "vitalsUnit": null
         },
         {
-          "name": "TC-003: Closed freight exchange page is reachable",
+          "name": "TC-003: Closed freight exchange (geschlossene Frachtenbörse) is reachable",
           "status": "pass",
-          "ms": 2930,
+          "ms": 1110,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -230,18 +296,63 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "12.5s"
+      "duration": "3.8s"
     },
     {
-      "id": "chromium--searchfrachtenboerse-durchsuchenspecjs--frachtenbrse-durchsuchen",
-      "name": "chromium › search/frachtenboerse-durchsuchen.spec.js › Frachtenbörse durchsuchen",
+      "id": "chromium--testsauthneue-benutzer-registrierungspecjs--neue-benutzer-registrierung--kep-dienstleister-35-t",
+      "name": "chromium › tests/auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung — KEP-Dienstleister (3,5 t)",
+      "icon": "🔐",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001 [KEP-Dienstleister (3,5 t)]: Valid registration — page reachable and form present",
+          "status": "pass",
+          "ms": 1331,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-002 [KEP-Dienstleister (3,5 t)]: Invalid email — form is not submitted",
+          "status": "pass",
+          "ms": 1462,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-003 [KEP-Dienstleister (3,5 t)]: Empty required fields — form stays on registration page",
+          "status": "pass",
+          "ms": 3512,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        }
+      ],
+      "duration": "6.3s"
+    },
+    {
+      "id": "chromium--testssearchfrachtenboerse-durchsuchenspecjs--frachtenbrse-durchsuchen",
+      "name": "chromium › tests/search/frachtenboerse-durchsuchen.spec.js › Frachtenbörse durchsuchen",
       "icon": "🔍",
       "url": "",
       "tests": [
         {
-          "name": "TC-001: Search with Aufbauart filter",
+          "name": "TC-001: Aufbauart filter",
           "status": "pass",
-          "ms": 4086,
+          "ms": 1908,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -253,7 +364,7 @@
         {
           "name": "TC-002: Origin–destination route search",
           "status": "pass",
-          "ms": 4402,
+          "ms": 2119,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -265,7 +376,7 @@
         {
           "name": "TC-003: Default search returns results or preview page",
           "status": "pass",
-          "ms": 3673,
+          "ms": 3375,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -275,132 +386,312 @@
           "vitalsUnit": null
         }
       ],
-      "duration": "12.2s"
+      "duration": "7.4s"
     },
     {
-      "id": "chromium--vitalsweb-vitalsspecjs--performance--web-vitals--homepage",
-      "name": "chromium › vitals/web-vitals.spec.js › performance › web-vitals › Homepage",
+      "id": "chromium--testsauthneue-benutzer-registrierungspecjs--neue-benutzer-registrierung--produktion",
+      "name": "chromium › tests/auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung — Produktion",
+      "icon": "🔐",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001 [Produktion]: Valid registration — page reachable and form present",
+          "status": "pass",
+          "ms": 1295,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-002 [Produktion]: Invalid email — form is not submitted",
+          "status": "pass",
+          "ms": 1727,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-003 [Produktion]: Empty required fields — form stays on registration page",
+          "status": "pass",
+          "ms": 5996,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        }
+      ],
+      "duration": "9.0s"
+    },
+    {
+      "id": "chromium--testsvitalsweb-vitalsspecjs--performance--web-vitals--homepage",
+      "name": "chromium › tests/vitals/web-vitals.spec.js › performance › web-vitals › Homepage",
       "icon": "⚡",
       "url": "",
       "tests": [
         {
           "name": "TTFB — Homepage",
           "status": "pass",
-          "ms": 2571,
+          "ms": 774,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "TTFB",
-          "vitalsValue": 1214,
+          "vitalsValue": 632,
           "vitalsUnit": "ms"
         },
         {
           "name": "LCP — Homepage",
           "status": "pass",
-          "ms": 8079,
+          "ms": 7205,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "LCP",
-          "vitalsValue": 1256,
+          "vitalsValue": 1384,
           "vitalsUnit": "ms"
         },
         {
           "name": "CLS — Homepage",
           "status": "pass",
-          "ms": 7899,
+          "ms": 10687,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "CLS",
-          "vitalsValue": 0,
+          "vitalsValue": 0.002,
           "vitalsUnit": "score"
         }
       ],
-      "duration": "18.5s"
+      "duration": "18.7s"
     },
     {
-      "id": "chromium--vitalsweb-vitalsspecjs--performance--web-vitals--frachtenbrse",
-      "name": "chromium › vitals/web-vitals.spec.js › performance › web-vitals › Frachtenbörse",
+      "id": "chromium--testsauthneue-benutzer-registrierungspecjs--neue-benutzer-registrierung--lagerhalter",
+      "name": "chromium › tests/auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung — Lagerhalter",
+      "icon": "🔐",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001 [Lagerhalter]: Valid registration — page reachable and form present",
+          "status": "pass",
+          "ms": 961,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-002 [Lagerhalter]: Invalid email — form is not submitted",
+          "status": "pass",
+          "ms": 3033,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-003 [Lagerhalter]: Empty required fields — form stays on registration page",
+          "status": "pass",
+          "ms": 2324,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        }
+      ],
+      "duration": "6.3s"
+    },
+    {
+      "id": "chromium--testsauthneue-benutzer-registrierungspecjs--neue-benutzer-registrierung--entsorger",
+      "name": "chromium › tests/auth/neue-benutzer-registrierung.spec.js › Neue Benutzer Registrierung — Entsorger",
+      "icon": "🔐",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001 [Entsorger]: Valid registration — page reachable and form present",
+          "status": "pass",
+          "ms": 1376,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-002 [Entsorger]: Invalid email — form is not submitted",
+          "status": "pass",
+          "ms": 3299,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-003 [Entsorger]: Empty required fields — form stays on registration page",
+          "status": "pass",
+          "ms": 2458,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        }
+      ],
+      "duration": "7.1s"
+    },
+    {
+      "id": "chromium--testsvitalsweb-vitalsspecjs--performance--web-vitals--frachtenbrse",
+      "name": "chromium › tests/vitals/web-vitals.spec.js › performance › web-vitals › Frachtenbörse",
       "icon": "🔍",
       "url": "",
       "tests": [
         {
           "name": "TTFB — Frachtenbörse",
           "status": "pass",
-          "ms": 1825,
+          "ms": 1182,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "TTFB",
-          "vitalsValue": 1058,
+          "vitalsValue": 962,
           "vitalsUnit": "ms"
         },
         {
           "name": "LCP — Frachtenbörse",
           "status": "pass",
-          "ms": 7364,
+          "ms": 6346,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "LCP",
-          "vitalsValue": 1476,
+          "vitalsValue": 1408,
           "vitalsUnit": "ms"
         },
         {
           "name": "CLS — Frachtenbörse",
           "status": "pass",
-          "ms": 7810,
+          "ms": 5765,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "CLS",
-          "vitalsValue": 0.001,
+          "vitalsValue": 0,
           "vitalsUnit": "score"
         }
       ],
-      "duration": "17.0s"
+      "duration": "13.3s"
     },
     {
-      "id": "chromium--vitalsweb-vitalsspecjs--performance--web-vitals--registrierung",
-      "name": "chromium › vitals/web-vitals.spec.js › performance › web-vitals › Registrierung",
+      "id": "chromium--testsmiscresponsive-design-browser-kompatibilitaetspecjs--responsive-design--browser-kompatibilitt",
+      "name": "chromium › tests/misc/responsive-design-browser-kompatibilitaet.spec.js › Responsive Design & Browser-Kompatibilität",
+      "icon": "📱",
+      "url": "",
+      "tests": [
+        {
+          "name": "TC-001: Mobile (375px) Navigation — Hamburger-Menü sichtbar, alle Links erreichbar",
+          "status": "pass",
+          "ms": 1919,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-002: Tablet (768px) Layout — Formularfelder sichtbar und ausreichend breit",
+          "status": "pass",
+          "ms": 1300,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        },
+        {
+          "name": "TC-003: Desktop (1920px) Layout — Navigation und Formular vollständig sichtbar",
+          "status": "pass",
+          "ms": 1247,
+          "locator": "After Hooks",
+          "step": "After Hooks",
+          "error": null,
+          "retry": null,
+          "vitalsMetric": null,
+          "vitalsValue": null,
+          "vitalsUnit": null
+        }
+      ],
+      "duration": "4.5s"
+    },
+    {
+      "id": "chromium--testsvitalsweb-vitalsspecjs--performance--web-vitals--registrierung",
+      "name": "chromium › tests/vitals/web-vitals.spec.js › performance › web-vitals › Registrierung",
       "icon": "🔐",
       "url": "",
       "tests": [
         {
           "name": "TTFB — Registrierung",
           "status": "pass",
-          "ms": 1579,
+          "ms": 705,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "TTFB",
-          "vitalsValue": 1031,
+          "vitalsValue": 608,
           "vitalsUnit": "ms"
         },
         {
           "name": "LCP — Registrierung",
           "status": "pass",
-          "ms": 8053,
+          "ms": 6465,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "LCP",
-          "vitalsValue": 916,
+          "vitalsValue": 804,
           "vitalsUnit": "ms"
         },
         {
           "name": "CLS — Registrierung",
           "status": "pass",
-          "ms": 9650,
+          "ms": 7149,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -410,42 +701,42 @@
           "vitalsUnit": "score"
         }
       ],
-      "duration": "19.3s"
+      "duration": "14.3s"
     },
     {
-      "id": "chromium--vitalsweb-vitalsspecjs--performance--web-vitals--services",
-      "name": "chromium › vitals/web-vitals.spec.js › performance › web-vitals › Services",
+      "id": "chromium--testsvitalsweb-vitalsspecjs--performance--web-vitals--services",
+      "name": "chromium › tests/vitals/web-vitals.spec.js › performance › web-vitals › Services",
       "icon": "🧭",
       "url": "",
       "tests": [
         {
           "name": "TTFB — Services",
           "status": "pass",
-          "ms": 1999,
+          "ms": 633,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "TTFB",
-          "vitalsValue": 1000,
+          "vitalsValue": 526,
           "vitalsUnit": "ms"
         },
         {
           "name": "LCP — Services",
           "status": "pass",
-          "ms": 7244,
+          "ms": 5975,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
           "retry": null,
           "vitalsMetric": "LCP",
-          "vitalsValue": 1572,
+          "vitalsValue": 1068,
           "vitalsUnit": "ms"
         },
         {
           "name": "CLS — Services",
           "status": "pass",
-          "ms": 8130,
+          "ms": 6264,
           "locator": "After Hooks",
           "step": "After Hooks",
           "error": null,
@@ -455,7 +746,7 @@
           "vitalsUnit": "score"
         }
       ],
-      "duration": "17.4s"
+      "duration": "12.9s"
     }
   ]
 }
